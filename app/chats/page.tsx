@@ -2,7 +2,8 @@
 
 import PrintChats from "@/components/PrintChats";
 import EmotionChart from "@/components/EmotionChart"; // Import EmotionChart
-import EmotionCards from "@/components/EmotionCards";
+import EmotionCards from "@/components/EmotionCards"; // Import EmotionCards
+import EmotionDonutChart from "@/components/EmotionDonutChart"; // Import EmotionDonutChart
 import { useState, useEffect } from "react";
 
 export default function ChatsPage() {
@@ -29,8 +30,17 @@ export default function ChatsPage() {
 
       {/* Render the emotional chart */}
       <h2 className="text-xl font-bold mt-6 mb-4">Emotional History</h2>
-      {emotionalData && <EmotionChart data={emotionalData} />}
-      {emotionalData && <EmotionCards data={emotionalData} />}
+      {emotionalData && (
+        <>
+          <EmotionChart data={emotionalData} />
+          <EmotionCards data={emotionalData} />
+          
+          {/* Add the Donut Chart after EmotionCards */}
+          <div className="mt-8">
+            <EmotionDonutChart data={emotionalData} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
