@@ -2,9 +2,39 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Phone } from "lucide-react";
+import { useState } from "react";
 
 export default function StartCall() {
   const { status, connect } = useVoice();
+  const [waves, setWaves] = useState([]);
+
+  const createWave = (e) => {
+    const waveId = Date.now();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const maxDimension = Math.max(viewportWidth, viewportHeight);
+    const waveSize = maxDimension * 2; // Large enough to cover the entire screen
+
+    const waveStyle = {
+      left: `${e.clientX - waveSize / 2}px`,
+      top: `${e.clientY - waveSize / 2}px`,
+      width: `${waveSize}px`,
+      height: `${waveSize}px`,
+    };
+
+    // Create multiple waves with different classes
+    setWaves((prevWaves) => [
+      ...prevWaves,
+      { id: waveId, style: waveStyle, type: "primary" },
+      { id: waveId + 1, style: waveStyle, type: "secondary" },
+      { id: waveId + 2, style: waveStyle, type: "tertiary" },
+    ]);
+
+    // Remove the waves after the animation ends
+    setTimeout(() => {
+      setWaves((prevWaves) => prevWaves.filter((wave) => wave.id !== waveId && wave.id !== waveId + 1 && wave.id !== waveId + 2));
+    }, 1200);
+  };
 
   return (
     <AnimatePresence>
@@ -29,8 +59,9 @@ export default function StartCall() {
               }}
             >
               <Button
-                className={"glow-button z-50 flex items-center gap-2 px-6 py-3"}
-                onClick={() => {
+                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                onClick={(e) => {
+                  createWave(e);
                   connect()
                     .then(() => {})
                     .catch(() => {})
@@ -48,6 +79,15 @@ export default function StartCall() {
               </Button>
             </motion.div>
           </AnimatePresence>
+
+          {/* Render the waves, which will now cover the whole page and have multiple ripples */}
+          {waves.map((wave) => (
+            <span
+              key={wave.id}
+              className={`wave-effect ${wave.type}`}
+              style={wave.style}
+            ></span>
+          ))}
         </motion.div>
       ) : null}
     </AnimatePresence>

@@ -47,19 +47,45 @@
     --input: 230 20% 35%;
     --ring: 240 80% 67%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border font-sans;
-  }
-  body {
-    @apply bg-background text-foreground;
+  @keyframes wave {
+    0% {
+      transform: scale(0.2);
+      opacity: 0.9;
+      filter: blur(0);
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.6;
+      filter: blur(8px); /* Adding blur effect */
+    }
+    100% {
+      transform: scale(3); /* Ensuring full-page coverage */
+      opacity: 0;
+      filter: blur(12px);
+    }
   }
 
   .glow-button {
-    @apply transition-all duration-500 ease-in-out shadow-lg hover:scale-105 hover:shadow-[0_0_20px_rgba(0,132,255,0.7)] hover:bg-gradient-to-r from-primary to-accent text-white;
+    @apply relative transition-all duration-500 ease-in-out shadow-lg hover:scale-105 hover:shadow-[0_0_20px_rgba(0,132,255,0.7)] hover:bg-gradient-to-r from-primary to-accent text-white;
     border-radius: var(--radius);
     background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  .wave-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 132, 255, 0.7), rgba(132, 0, 255, 0.5)); /* Cool gradient */
+    animation: wave 1.2s ease-out;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .wave-effect.secondary {
+    animation-delay: 0.2s; /* Create a second ripple */
+  }
+
+  .wave-effect.tertiary {
+    animation-delay: 0.4s; /* Create a third ripple */
   }
 }
