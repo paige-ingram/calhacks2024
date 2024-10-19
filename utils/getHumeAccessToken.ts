@@ -13,4 +13,4 @@ export const getHumeAccessToken = async () => {
   }
 
   return accessToken ?? null;
-};
+}; 
