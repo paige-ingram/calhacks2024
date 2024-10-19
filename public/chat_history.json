@@ -1,0 +1,272 @@
+{
+  "response": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "totalPages": 8,
+    "paginationDirection": "ASC",
+    "chatsPage": [
+      {
+        "id": "a8dea6fb-9-f45-4328-82b0-803a2d20aada",
+        "chatGroupId": "5ff50abd-7f3f-4f61-8d1a-061f0556178e",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729306798971,
+        "endTimestamp": 1729306806078,
+        "eventCount": 3,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "549f14b1-6216-4439-bb1d-a4437e7223af",
+        "chatGroupId": "9b1e9bbc-3157-49da-9a7f-d58cd18f58a2",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729307108490,
+        "endTimestamp": 1729307129742,
+        "eventCount": 3,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "e9fc6c99-0e76-4dce-9f9f-7a6e7e101446",
+        "chatGroupId": "b2d60db4-f3d1-4ca6-8558-d033d914a0db",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729308588472,
+        "endTimestamp": 1729308609456,
+        "eventCount": 10,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "f79ad803-fe1d-4ac4-b701-a3aba9dd6148",
+        "chatGroupId": "a408667b-0fbf-4216-8442-fc53035df638",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729314441853,
+        "endTimestamp": 1729314461749,
+        "eventCount": 10,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "63a0a382-e17c-4b3d-8ce6-1a7f65298974",
+        "chatGroupId": "5c9e80cf-d6ce-47d3-9728-d76e68c23f6a",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729314729751,
+        "endTimestamp": 1729314739429,
+        "eventCount": 4,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "f45f2c09-5228-4ebc-be46-96cf676f4e85",
+        "chatGroupId": "bcc44c18-b5e7-452d-8bc4-ae9d07d1d526",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729315517721,
+        "endTimestamp": 1729315541851,
+        "eventCount": 7,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "7644903f-dc6a-45ae-85cc-a9c1ea720b05",
+        "chatGroupId": "20dfe1d4-1de2-4580-9b86-b024a87f9ac1",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729315640724,
+        "endTimestamp": 1729315642713,
+        "eventCount": 1,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "5ee7ac6c-8449-48b0-ac08-da303d877a68",
+        "chatGroupId": "488d558c-4ef1-44c6-8d06-e35d2cd9ba9c",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729316244138,
+        "endTimestamp": 1729316246543,
+        "eventCount": 1,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "d8c19866-d734-4edb-83f2-23823aa94fce",
+        "chatGroupId": "aba005a4-766f-4f0e-b4b9-ce6641f35b87",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729316286016,
+        "endTimestamp": 1729316287200,
+        "eventCount": 1,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      },
+      {
+        "id": "4b4ec5b8-d87a-4d15-a080-ab9c03c612f0",
+        "chatGroupId": "eaac0725-9973-4012-b85e-3f6ec472036a",
+        "tag": null,
+        "status": "USER_ENDED",
+        "startTimestamp": 1729316766338,
+        "endTimestamp": 1729316768405,
+        "eventCount": 1,
+        "config": {
+          "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+          "version": 0
+        }
+      }
+    ]
+  },
+  "data": [
+    {
+      "id": "a8dea6fb-9f45-4328-82b0-803a2d20aada",
+      "chatGroupId": "5ff50abd-7f3f-4f61-8d1a-061f0556178e",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729306798971,
+      "endTimestamp": 1729306806078,
+      "eventCount": 3,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "549f14b1-6216-4439-bb1d-a4437e7223af",
+      "chatGroupId": "9b1e9bbc-3157-49da-9a7f-d58cd18f58a2",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729307108490,
+      "endTimestamp": 1729307129742,
+      "eventCount": 3,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "e9fc6c99-0e76-4dce-9f9f-7a6e7e101446",
+      "chatGroupId": "b2d60db4-f3d1-4ca6-8558-d033d914a0db",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729308588472,
+      "endTimestamp": 1729308609456,
+      "eventCount": 10,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "f79ad803-fe1d-4ac4-b701-a3aba9dd6148",
+      "chatGroupId": "a408667b-0fbf-4216-8442-fc53035df638",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729314441853,
+      "endTimestamp": 1729314461749,
+      "eventCount": 10,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "63a0a382-e17c-4b3d-8ce6-1a7f65298974",
+      "chatGroupId": "5c9e80cf-d6ce-47d3-9728-d76e68c23f6a",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729314729751,
+      "endTimestamp": 1729314739429,
+      "eventCount": 4,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "f45f2c09-5228-4ebc-be46-96cf676f4e85",
+      "chatGroupId": "bcc44c18-b5e7-452d-8bc4-ae9d07d1d526",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729315517721,
+      "endTimestamp": 1729315541851,
+      "eventCount": 7,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "7644903f-dc6a-45ae-85cc-a9c1ea720b05",
+      "chatGroupId": "20dfe1d4-1de2-4580-9b86-b024a87f9ac1",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729315640724,
+      "endTimestamp": 1729315642713,
+      "eventCount": 1,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "5ee7ac6c-8449-48b0-ac08-da303d877a68",
+      "chatGroupId": "488d558c-4ef1-44c6-8d06-e35d2cd9ba9c",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729316244138,
+      "endTimestamp": 1729316246543,
+      "eventCount": 1,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "d8c19866-d734-4edb-83f2-23823aa94fce",
+      "chatGroupId": "aba005a4-766f-4f0e-b4b9-ce6641f35b87",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729316286016,
+      "endTimestamp": 1729316287200,
+      "eventCount": 1,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    },
+    {
+      "id": "4b4ec5b8-d87a-4d15-a080-ab9c03c612f0",
+      "chatGroupId": "eaac0725-9973-4012-b85e-3f6ec472036a",
+      "tag": null,
+      "status": "USER_ENDED",
+      "startTimestamp": 1729316766338,
+      "endTimestamp": 1729316768405,
+      "eventCount": 1,
+      "config": {
+        "id": "6eb0edd8-8997-42df-946f-b0399ef8067f",
+        "version": 0
+      }
+    }
+  ]
+}

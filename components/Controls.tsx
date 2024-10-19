@@ -13,31 +13,19 @@ export default function Controls() {
 
   // Function to fetch chat history after the call ends
   const fetchChatHistory = async () => {
-    const apiKey = process.env.NEXT_PUBLIC_HUME_API_KEY; // Use the API key from the environment variables
-
-    if (!apiKey) {
-      console.error("Hume API key is missing.");
-      return;
-    }
-
-    const client = new HumeClient({ apiKey });
-
     try {
-      // Fetch the chat history using the Hume API
-      const chats = await client.empathicVoice.chats.listChats({
-        pageNumber: 0,
-        pageSize: 10, // Adjust pagination if necessary
-        ascendingOrder: true,
+      const response = await fetch('/api/saveChat', {
+        method: 'POST',
       });
-
-      console.log('Chat History:', chats);  // Print chat history in the terminal
-
-      // Optionally, save the chat history to a JSON file (for Node.js environments)
-      // const fs = require('fs');
-      // fs.writeFileSync('chat_history.json', JSON.stringify(chats, null, 2));
-
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch chat history');
+      }
+  
+      const result = await response.json();
+      console.log('Chat history saved successfully:', result);
     } catch (error) {
-      console.error("Error fetching chat history:", error);  // Error handling
+      console.error('Error fetching chat history:', error);
     }
   };
 
