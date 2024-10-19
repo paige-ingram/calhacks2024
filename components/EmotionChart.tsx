@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import Chart from 'chart.js/auto';
 import { CategoryScale } from 'chart.js';
@@ -18,7 +18,6 @@ interface EmotionChartProps {
 
 export default function EmotionChart({ data }: EmotionChartProps) {
   const [chartData, setChartData] = useState<any>(null);
-  const chartRef = useRef<Chart | null>(null); // Use a ref for the chart instance
 
   useEffect(() => {
     if (data) {
@@ -40,18 +39,11 @@ export default function EmotionChart({ data }: EmotionChartProps) {
         ],
       });
     }
-
-    // Cleanup: Destroy the chart instance before re-rendering
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
   }, [data]);
 
   return (
     <div>
-      {chartData && <Line data={chartData} ref={chartRef} />}
+      {chartData && <Line data={chartData} />}
     </div>
   );
 }
