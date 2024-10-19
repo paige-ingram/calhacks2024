@@ -13,7 +13,7 @@ interface Wave {
 
 export default function StartCall() {
   const { status, connect } = useVoice();
-  const [waves, setWaves] = useState<Wave[]>([]); // Explicitly define the type for the state
+  const [waves, setWaves] = useState<Wave[]>([]);
 
   const createWave = (e: React.MouseEvent<HTMLButtonElement>) => {
     const waveId = Date.now();
@@ -61,6 +61,9 @@ export default function StartCall() {
             exit: { opacity: 0 },
           }}
         >
+          {/* Northern Lights Background */}
+          <div className="northern-lights"></div>
+
           <AnimatePresence>
             <motion.div
               variants={{
@@ -91,7 +94,7 @@ export default function StartCall() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Render the waves, which will now cover the whole page and have multiple ripples */}
+          {/* Render the waves, which will cover the whole page and have multiple ripples */}
           {waves.map((wave) => (
             <span
               key={wave.id}
