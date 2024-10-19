@@ -4,11 +4,18 @@ import { Button } from "./ui/button";
 import { Phone } from "lucide-react";
 import { useState } from "react";
 
+// Define the type for wave objects
+interface Wave {
+  id: number;
+  style: { left: string; top: string; width: string; height: string };
+  type: string;
+}
+
 export default function StartCall() {
   const { status, connect } = useVoice();
-  const [waves, setWaves] = useState([]);
+  const [waves, setWaves] = useState<Wave[]>([]); // Explicitly define the type for the state
 
-  const createWave = (e) => {
+  const createWave = (e: React.MouseEvent<HTMLButtonElement>) => {
     const waveId = Date.now();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -32,7 +39,11 @@ export default function StartCall() {
 
     // Remove the waves after the animation ends
     setTimeout(() => {
-      setWaves((prevWaves) => prevWaves.filter((wave) => wave.id !== waveId && wave.id !== waveId + 1 && wave.id !== waveId + 2));
+      setWaves((prevWaves) =>
+        prevWaves.filter(
+          (wave) => wave.id !== waveId && wave.id !== waveId + 1 && wave.id !== waveId + 2
+        )
+      );
     }, 1200);
   };
 
