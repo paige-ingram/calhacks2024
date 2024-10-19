@@ -1,14 +1,12 @@
-"use client";
-
-
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs";
 
-const Camera = () => {
+const Camera = ({ onPersonDetected }: { onPersonDetected: () => void }) => {
   const webcamRef = useRef<Webcam>(null);
   const [model, setModel] = useState<cocoSsd.ObjectDetection | null>(null);
+  const [personDetected, setPersonDetected] = useState(false);
 
   // Load COCO-SSD model
   useEffect(() => {
@@ -19,7 +17,7 @@ const Camera = () => {
     loadModel();
   }, []);
 
-  // Detect motion using COCO-SSD
+  // Detect motion (i.e., detect a person using COCO-SSD)
   const detectMotion = async () => {
     if (
       webcamRef.current &&
@@ -29,13 +27,20 @@ const Camera = () => {
       const video = webcamRef.current.video;
       const predictions = await model.detect(video);
 
-      if (predictions.length > 0) {
-        console.log("Motion detected:", predictions);
+      // Check if any of the predictions detect a person
+      const personFound = predictions.some(
+        (prediction) => prediction.class === "person"
+      );
+
+      if (personFound) {
+        console.log("Person detected:", predictions);
+        setPersonDetected(true); // Set state to detected
+        onPersonDetected(); // Notify parent component
       }
     }
   };
 
-  // Set up a loop to continuously detect motion
+  // Continuously detect motion
   useEffect(() => {
     const intervalId = setInterval(detectMotion, 1000); // Check every second
     return () => clearInterval(intervalId);
@@ -43,8 +48,12 @@ const Camera = () => {
 
   return (
     <div className="camera-container">
-      <Webcam ref={webcamRef} style={{ width: "100%", height: "auto" }} />
-      <p>Webcam Active. Detecting Motion...</p>
+      {!personDetected && (
+        <>
+          <Webcam ref={webcamRef} style={{ width: "100%", height: "auto" }} />
+          <p>Detecting motion...</p>
+        </>
+      )}
     </div>
   );
 };
