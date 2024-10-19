@@ -20,9 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Fetch the chat history from Hume API
     const chats = await client.empathicVoice.chats.listChats({
-      pageNumber: 0,
+      pageNumber: 12,
       pageSize: 10,
-      ascendingOrder: true,
+      descendingOrder: true,
     });
 
     // Define the path for saving the chat history file
