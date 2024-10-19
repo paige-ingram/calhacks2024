@@ -1,9 +1,10 @@
-"use client";  // Add this at the top
+"use client";
 
 import PrintChats from "@/components/PrintChats";
-import EmotionChart from "@/components/EmotionChart"; // Import EmotionChart
-import EmotionCards from "@/components/EmotionCards"; // Import EmotionCards
-import EmotionDonutChart from "@/components/EmotionDonutChart"; // Import EmotionDonutChart
+import EmotionChart from "@/components/EmotionChart"; 
+import EmotionCards from "@/components/EmotionCards";
+import EmotionDonutChart from "@/components/EmotionDonutChart";
+import EmotionBarChart from "@/components/EmotionBarChart"; 
 import { useState, useEffect } from "react";
 
 export default function ChatsPage() {
@@ -28,18 +29,30 @@ export default function ChatsPage() {
       <h1 className="text-2xl font-bold mb-4">Chat Messages</h1>
       <PrintChats accessToken={accessToken} />
 
-      {/* Render the emotional chart */}
       <h2 className="text-xl font-bold mt-6 mb-4">Emotional History</h2>
+
       {emotionalData && (
-        <>
-          <EmotionChart data={emotionalData} />
-          <EmotionCards data={emotionalData} />
-          
-          {/* Add the Donut Chart after EmotionCards */}
-          <div className="mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Emotion Cards */}
+          <div className="w-full">
+            <EmotionCards data={emotionalData} />
+          </div>
+
+          {/* Emotion Donut Chart */}
+          <div className="w-full h-64">
             <EmotionDonutChart data={emotionalData} />
           </div>
-        </>
+
+          {/* Emotion Intensity Bar Chart */}
+          <div className="w-full h-64">
+            <EmotionBarChart data={emotionalData} />
+          </div>
+
+          {/* Emotion Chart */}
+          <div className="w-full h-64">
+            <EmotionChart data={emotionalData} />
+          </div>
+        </div>
       )}
     </div>
   );

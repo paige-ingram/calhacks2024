@@ -23,7 +23,7 @@ interface EmotionData {
     };
   
     return (
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap justify-center space-x-4">
         {data.emotions.map((emotionData, index) => (
           <div key={index} className="p-4 m-2 border rounded shadow-md text-center">
             <div className="text-4xl mb-2">{getEmotionEmoji(emotionData.emotion)}</div>
