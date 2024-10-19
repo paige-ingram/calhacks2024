@@ -29,7 +29,7 @@ export default function StartCall() {
               }}
             >
               <Button
-                className={"z-50 flex items-center gap-1.5"}
+                className={"glow-button z-50 flex items-center gap-2 px-6 py-3"}
                 onClick={() => {
                   connect()
                     .then(() => {})
@@ -39,12 +39,12 @@ export default function StartCall() {
               >
                 <span>
                   <Phone
-                    className={"size-4 opacity-50"}
+                    className={"size-5 opacity-70 text-white"}
                     strokeWidth={2}
                     stroke={"currentColor"}
                   />
                 </span>
-                <span>Start Call</span>
+                <span className="font-semibold">Start Call</span>
               </Button>
             </motion.div>
           </AnimatePresence>
