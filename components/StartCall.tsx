@@ -1,7 +1,7 @@
 import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Phone } from "lucide-react";
+import { Sun } from "lucide-react";
 import { useState } from "react";
 
 // Define the type for wave objects
@@ -80,13 +80,13 @@ export default function StartCall() {
                 }}
               >
                 <span>
-                  <Phone
+                  <Sun
                     className={"size-5 opacity-70 text-white"}
                     strokeWidth={2}
                     stroke={"currentColor"}
                   />
                 </span>
-                <span className="font-semibold">Start Call</span>
+                <span className="font-semibold">Launch Halo</span>
               </Button>
             </motion.div>
           </AnimatePresence>

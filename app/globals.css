@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 220 15% 96%; /* Light greyish blue */
-    --foreground: 230 25% 10%; /* Dark blue-gray */
+    --background: 220 15% 96%; /* Use the --primary color for background */
+    --foreground: 230 25% 90%; /* Lighter text for contrast */
     --card: 220 15% 96%;
     --card-foreground: 230 25% 10%;
     --popover: 220 15% 96%;
@@ -27,8 +27,8 @@
   }
 
   .dark {
-    --background: 230 25% 10%; /* Dark blue-gray */
-    --foreground: 0 0% 98%;
+    --background: 230 25% 10%; /* Same dark blue-gray for dark mode */
+    --foreground: 0 0% 100%;
     --card: 230 25% 15%;
     --card-foreground: 0 0% 98%;
     --popover: 230 25% 15%;
