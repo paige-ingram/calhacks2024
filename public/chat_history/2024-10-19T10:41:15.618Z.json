@@ -1,0 +1,66 @@
+[
+  {
+    "type": "assistant_message",
+    "id": "2266a354b25542258c96994b435f1b4f",
+    "message": {
+      "role": "assistant",
+      "content": "Good morning, Paige!"
+    },
+    "models": {
+      "prosody": {
+        "scores": {
+          "admiration": 0.058013916015625,
+          "adoration": 0.027069091796875,
+          "aestheticAppreciation": 0.0316162109375,
+          "amusement": 0.08648681640625,
+          "anger": 0.027801513671875,
+          "anxiety": 0.02508544921875,
+          "awe": 0.0097808837890625,
+          "awkwardness": 0.0330810546875,
+          "boredom": 0.06903076171875,
+          "calmness": 0.173095703125,
+          "concentration": 0.0310211181640625,
+          "confusion": 0.0193023681640625,
+          "contemplation": 0.01242828369140625,
+          "contempt": 0.017852783203125,
+          "contentment": 0.1015625,
+          "craving": 0.00577545166015625,
+          "desire": 0.0053863525390625,
+          "determination": 0.0634765625,
+          "disappointment": 0.0160980224609375,
+          "disgust": 0.006290435791015625,
+          "distress": 0.030914306640625,
+          "doubt": 0.0211181640625,
+          "ecstasy": 0.0147857666015625,
+          "embarrassment": 0.0078125,
+          "empathicPain": 0.007122039794921875,
+          "entrancement": 0.00760650634765625,
+          "envy": 0.0090179443359375,
+          "excitement": 0.1771240234375,
+          "fear": 0.01348114013671875,
+          "guilt": 0.00443267822265625,
+          "horror": 0.006717681884765625,
+          "interest": 0.1375732421875,
+          "joy": 0.15966796875,
+          "love": 0.039276123046875,
+          "nostalgia": 0.01312255859375,
+          "pain": 0.0078125,
+          "pride": 0.039337158203125,
+          "realization": 0.01495361328125,
+          "relief": 0.0190887451171875,
+          "romance": 0.004756927490234375,
+          "sadness": 0.01146697998046875,
+          "satisfaction": 0.1026611328125,
+          "shame": 0.0038089752197265625,
+          "surpriseNegative": 0.0169219970703125,
+          "surprisePositive": 0.046478271484375,
+          "sympathy": 0.01519012451171875,
+          "tiredness": 0.0179901123046875,
+          "triumph": 0.02880859375
+        }
+      }
+    },
+    "fromText": true,
+    "receivedAt": "2024-10-19T10:41:15.066Z"
+  }
+]
