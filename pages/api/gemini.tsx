@@ -8,8 +8,20 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const readChatHistory = () => {
-  const filePath = path.join(process.cwd(), 'public/chat_history/2024-10-19T15:05:56.520Z.json'); 
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
+  const directoryPath = path.join(process.cwd(), 'public/chat_history');
+  const files = fs.readdirSync(directoryPath).filter(file => file.endsWith('.json'));
+// Sort files by date in descending order to get the most recent file
+  files.sort((a, b) => {
+    const timeA = new Date(a.split('.json')[0]).getTime();
+    const timeB = new Date(b.split('.json')[0]).getTime();
+    return timeB - timeA;
+  });
+
+  // Path to the most recent file
+  const mostRecentFile = path.join(directoryPath, files[0]);
+
+  // Read and parse the most recent file
+  const jsonData = fs.readFileSync(mostRecentFile, 'utf-8');
   const chatHistory = JSON.parse(jsonData);
 
   // Extract role and content from messages
