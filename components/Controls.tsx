@@ -6,9 +6,40 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Toggle } from "./ui/toggle";
 import MicFFT from "./MicFFT";
 import { cn } from "@/utils";
+import { HumeClient } from "hume";
 
 export default function Controls() {
   const { disconnect, status, isMuted, unmute, mute, micFft } = useVoice();
+
+  // Function to fetch chat history after the call ends
+  const fetchChatHistory = async () => {
+    const apiKey = process.env.NEXT_PUBLIC_HUME_API_KEY; // Use the API key from the environment variables
+
+    if (!apiKey) {
+      console.error("Hume API key is missing.");
+      return;
+    }
+
+    const client = new HumeClient({ apiKey });
+
+    try {
+      // Fetch the chat history using the Hume API
+      const chats = await client.empathicVoice.chats.listChats({
+        pageNumber: 0,
+        pageSize: 10, // Adjust pagination if necessary
+        ascendingOrder: true,
+      });
+
+      console.log('Chat History:', chats);  // Print chat history in the terminal
+
+      // Optionally, save the chat history to a JSON file (for Node.js environments)
+      // const fs = require('fs');
+      // fs.writeFileSync('chat_history.json', JSON.stringify(chats, null, 2));
+
+    } catch (error) {
+      console.error("Error fetching chat history:", error);  // Error handling
+    }
+  };
 
   return (
     <div
@@ -62,7 +93,8 @@ export default function Controls() {
             <Button
               className={"flex items-center gap-1"}
               onClick={() => {
-                disconnect();
+                disconnect();  // End the call
+                fetchChatHistory();  // Fetch chat history after call ends
               }}
               variant={"destructive"}
             >
