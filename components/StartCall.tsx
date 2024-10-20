@@ -4,7 +4,19 @@ import { Button } from "./ui/button";
 import { Phone } from "lucide-react";
 
 export default function StartCall() {
-  const { status, connect } = useVoice();
+  // Use the useVoice hook to manage connection and session settings
+  const { status, connect, sendSessionSettings } = useVoice();
+
+  const handleStartCall = async () => {
+    try {
+      console.log("Attempting to connect...");
+      
+      await connect();
+
+    } catch (error) {
+      console.error("Failed to start call:", error);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -30,12 +42,7 @@ export default function StartCall() {
             >
               <Button
                 className={"z-50 flex items-center gap-1.5"}
-                onClick={() => {
-                  connect()
-                    .then(() => {})
-                    .catch(() => {})
-                    .finally(() => {});
-                }}
+                onClick={handleStartCall}
               >
                 <span>
                   <Phone

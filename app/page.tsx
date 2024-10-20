@@ -44,12 +44,7 @@ export default function Page() {
         <>
           <p>Welcome, {personName}!</p>
           <Chat accessToken={accessToken} />
-          <button
-            onClick={() => console.log("Starting call...")}
-            className="btn-start-call"
-          >
-            Start Call (For Dev Purpose)
-          </button>
+          
         </>
       )}
     </div>
