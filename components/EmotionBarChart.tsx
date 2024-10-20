@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface EmotionBarChartProps {
-  data: { emotions: { emotion: string; intensity: number }[] };
+  data: { emotion: string; intensity: number; timestamp: string }[];
 }
 
 export default function EmotionBarChart({ data }: EmotionBarChartProps) {
   const [chartData, setChartData] = useState<any>(null);
 
   useEffect(() => {
-    if (data && data.emotions) {
-      // Safely access emotions and intensities
-      const emotions = data.emotions.map(e => e.emotion);
-      const intensities = data.emotions.map(e => e.intensity);
+    if (data && data.length > 0) {
+      // Filter out non-numeric intensities (like "conversationStart") and map emotions and intensities
+      const filteredEmotions = data.filter(e => typeof e.intensity === 'number');
+      const emotions = filteredEmotions.map(e => e.emotion);
+      const intensities = filteredEmotions.map(e => e.intensity);
 
       setChartData({
         labels: emotions,
@@ -20,7 +33,7 @@ export default function EmotionBarChart({ data }: EmotionBarChartProps) {
           {
             label: 'Emotional Intensity',
             data: intensities,
-            backgroundColor: ['#FFCC00', '#FF4500', '#0088FF', '#32CD32'],
+            backgroundColor: ['#FFCC00', '#FF4500', '#0088FF', '#32CD32'], // Customize colors as needed
           },
         ],
       });
@@ -28,7 +41,7 @@ export default function EmotionBarChart({ data }: EmotionBarChartProps) {
   }, [data]);
 
   // Fallback for no data or undefined data
-  if (!data || !data.emotions || data.emotions.length === 0) {
+  if (!data || data.length === 0) {
     return <p>No emotional data available for the bar chart.</p>;
   }
 

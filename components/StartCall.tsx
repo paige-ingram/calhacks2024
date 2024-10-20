@@ -63,7 +63,9 @@ export default function StartCall() {
       console.log("/api/gemini"); // Using relative URL
       const response = await fetch("/api/gemini"); // No need to prepend the base URL
       const data = await response.json();
-      console.log("Summary:", JSON.stringify(data)); // Log the summary to the console
+
+      const summary = JSON.parse(data.summary)
+      console.log("Summary:", summary.response.candidates[0].content.parts[0].text); // Log the summary to the console
     } catch (error) {
       console.error("Failed to fetch summary:", error);
     }
