@@ -1,7 +1,7 @@
 import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Sun } from "lucide-react";
+import { Sun, Eye, Clock } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Camera from "./Camera"; // Import Camera component for detecting a person
 import Link from "next/link";
@@ -218,6 +218,7 @@ export default function StartCall() {
                           style={{ width: "300px" }}
                           onClick={(e) => createWave(e)}
                         >
+                          <Clock className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
                           <span className="font-semibold">Emotional History</span>
                         </Button>
                       </Link>
@@ -233,7 +234,8 @@ export default function StartCall() {
                           fetchSummary();
                         }}
                       >
-                        <span>Gemini Insights</span>
+                        <Eye className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                        <span className="font-semibold">Gemini Insights</span>
                       </Button>
                     </div>
                   )}

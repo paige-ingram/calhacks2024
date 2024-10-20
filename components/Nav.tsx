@@ -29,7 +29,7 @@ export const Nav = () => {
   return (
     <div
       className={
-        "relative px-6 py-3 flex items-center h-16 z-50 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:bg-gradient-to-r dark:from-gray-800 dark:via-gray-700 dark:to-black border-b border-border shadow-2xl rounded-full backdrop-blur-md glassmorphism"
+        "relative px-6 py-3 flex items-center h-16 z-50 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:bg-gradient-to-r dark:from-gray-800 dark:via-gray-700 dark:to-black border-b border-border shadow-2xl backdrop-blur-md glassmorphism" // Removed rounded-full
       }
     >
       {/* Particles in the background */}
