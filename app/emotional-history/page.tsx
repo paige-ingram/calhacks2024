@@ -5,6 +5,8 @@ import EmotionBarChart from '@/components/EmotionBarChart';
 import EmotionCards from '@/components/EmotionCards';
 import EmotionChart from '@/components/EmotionChart';
 import EmotionDonutChart from '@/components/EmotionDonutChart';
+import SpotifyLoginButton from '@/components/ui/SpotifyLoginButton';
+import { fetchRecommendedMusic } from '@/lib/spotify';
 
 // Color mapping for emotions
 const emotionColors: Record<string, string> = {
@@ -82,6 +84,8 @@ export default function EmotionalHistory() {
   // const [emotionData, setEmotionData] = useState<any>(null);
   const [emotionAvgs, setEmotionAvgs] = useState<any>(null);
   const [viewOutliers, setViewOutliers] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false); // State to track if user is logged in
+  const [recommendedMusic, setRecommendedMusic] = useState<any[]>([]); // State for recommended music
 
   useEffect(() => {
     fetchEmotionData().then(data => {
@@ -90,8 +94,16 @@ export default function EmotionalHistory() {
         console.log("Setting emotion avgs:", JSON.stringify(calculatedAverages));
         setEmotionAvgs(calculatedAverages); // Ensure this line is inside the if check
       }
-    });
-  }, []);
+        
+      // Fetch recommended music if logged in
+      if (loggedIn && data.weekEmotions.length > 0) {
+        const firstEmotion = data.weekEmotions[0].emotion;
+        const music = await fetchRecommendedMusic(firstEmotion);
+        setRecommendedMusic(music);
+      }
+    };
+    getData();
+  }, [loggedIn]); // Refetch recommended music once logged in
 
   // Function to calculate the weekly average intensity
   // const calculateWeeklyAverage = (data: any) => {
@@ -136,6 +148,26 @@ export default function EmotionalHistory() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-4xl font-bold mb-6 text-center">Your Weekly Emotional History</h1>
+      {/* Spotify Login Button */}
+      {!loggedIn ? (
+        <SpotifyLoginButton />
+      ) : (
+        <>
+          {/* Recommended Music */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4 text-center">Music Recommendations Based on Your Mood</h2>
+            <ul>
+              {recommendedMusic.map((track, index) => (
+                <li key={index}>
+                  <p>{track.name} by {track.artists[0].name}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
+
+      {/* Toggle View for Outliers */}
       <button
         className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => setViewOutliers(!viewOutliers)}

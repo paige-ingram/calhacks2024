@@ -45,7 +45,7 @@ export default function ClientComponent({
   return (
     <div
       className={
-        "relative grow flex flex-col mx-auto w-full overflow-hidden h-[0px]"
+        "relative grow flex flex-col mx-auto w-full overflow-hidden h-[0px] text-black dark:text-white"
       }
     >
       <VoiceProvider

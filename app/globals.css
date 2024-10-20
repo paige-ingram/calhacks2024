@@ -30,6 +30,28 @@
     --northern-lights-3: 300 80% 70%;  /* Magenta */
   }
 
+  /* Dark mode styles */
+.dark {
+  --background: 230 15% 12%; /* Dark grey background */
+  --foreground: 0 0% 100%; /* White text */
+  --card: 230 25% 15%;
+  --card-foreground: 0 0% 98%; /* White text on cards */
+  --primary: 220 50% 50%; /* Soft dark blue */
+  --primary-foreground: 0 0% 98%;
+  --secondary: 230 15% 25%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 230 15% 25%;
+  --muted-foreground: 240 5% 70%;
+  --accent: 260 65% 60%; /* Soft purple */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 230 20% 35%;
+  --input: 230 20% 35%;
+  --ring: 240 80% 67%; /* Glowing blue */
+}
+
+
   /* Northern Lights Animation */
   @keyframes northernLightsFlicker {
     0%, 100% {
