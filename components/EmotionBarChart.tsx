@@ -33,7 +33,7 @@ export default function EmotionBarChart({ data }: EmotionBarChartProps) {
           {
             label: 'Emotional Intensity',
             data: intensities,
-            backgroundColor: ['#FFCC00', '#FF4500', '#0088FF', '#32CD32'], // Customize colors as needed
+            backgroundColor: ['#0084FF', '#8400FF'], // Customize colors as needed
           },
         ],
       });

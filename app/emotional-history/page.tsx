@@ -92,7 +92,7 @@ export default function EmotionalHistory() {
       if (data) {
         const calculatedAverages = calculateEmotionAverages(data);
         console.log("Setting emotion avgs:", JSON.stringify(calculatedAverages));
-        setEmotionAvgs(calculatedAverages); // Ensure this line is inside the if check
+        setEmotionAvgs(calculatedAverages); 
       }
         
       // Fetch recommended music if logged in
@@ -135,15 +135,21 @@ export default function EmotionalHistory() {
   }
 
   const conversationStart = emotionAvgs.conversationStart || new Date().toISOString();
-  const emotionDataArray = Object.keys(emotionAvgs).map(emotion => ({
+  console.log("These are the emotion avgs: " + emotionAvgs);
+  const emotionDataArray = Object.keys(emotionAvgs)
+  .filter(emotion => emotion !== 'conversationStart')
+  .map(emotion => ({
     emotion: emotion,
     intensity: emotionAvgs[emotion],
     timestamp: conversationStart
   }));
-  console.log(JSON.stringify(emotionDataArray));
+  console.log("here is emotion data array: " + JSON.stringify(emotionDataArray));
 
   // const weeklyAverage = calculateWeeklyAverage(emotionAvgs);
   const outliers = emotionAvgs;
+
+  // need to fix this stuff
+  const filteredEmos = emotionDataArray;
 
   return (
     <div className="container mx-auto p-4">
@@ -189,7 +195,7 @@ export default function EmotionalHistory() {
           <div className="mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <EmotionCards data={{ emotions: emotionDataArray }} />
+              <EmotionCards data={emotionDataArray} />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -199,19 +205,19 @@ export default function EmotionalHistory() {
                 <EmotionBarChart data={emotionDataArray} />
               </div>
             </div>
-            <div className="bg-white p-4 shadow rounded-lg h-auto">
+            {/* <div className="bg-white p-4 shadow rounded-lg h-auto">
               <h2 className="text-xl font-semibold mb-4 text-center">Emotions Distribution</h2>
               <div className="h-80">
-                <EmotionDonutChart data={emotionAvgs} />
+                <EmotionDonutChart data={emotionDataArray} />
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="bg-white p-6 shadow rounded-lg">
+          {/* <div className="bg-white p-6 shadow rounded-lg">
             <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time</h2>
             <div className="h-96">
-              <EmotionChart data={emotionAvgs} />
+              <EmotionChart data={emotionDataArray} />
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>
