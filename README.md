@@ -1,21 +1,22 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/59be3433-6983-4e43-980c-ab2996ff84c2" alt="Halo Logo" width="150px">
-  <h1>Virtual Wellbeing Companion</h1>
+  <h1>Virtual Well-being Companion</h1>
 </div>
 
 ---
+![halo](https://github.com/user-attachments/assets/0a2939b4-c98d-4ca3-bb05-c53d7441c466)
 
-![image](https://github.com/user-attachments/assets/dea5efc4-ff14-499e-9338-9f6c52661277)
+![darkmode](https://github.com/user-attachments/assets/8a4e1bff-e289-4127-bc86-a7af0d6e244e)
+
 
 ---
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/40ce5edc-c877-4275-b3bf-406ef55d6338" alt="LLM Talk" style="width: 45%; height: 250px; object-fit: cover;"/>
-  <img src="https://github.com/user-attachments/assets/9785a5b1-af01-4b8c-81b9-b94855be8591" alt="Gemini Insights" style="width: 45%; height: 250px; object-fit: cover;"/>
-</div>
+![home](https://github.com/user-attachments/assets/a8ea444e-7b5a-4745-a054-4e1c12077751)
+![llm talk](https://github.com/user-attachments/assets/55fac168-7bb5-4664-8133-55a77bed671c)
 
 
-## Overview
+## Overview!
+
 
 **Halo** is a virtual mental wellbeing assistant designed to help users reflect on their emotions and daily experiences. Built around Hume's [Empathic Voice Interface](https://hume.docs.buildwithfern.com/docs/empathic-voice-interface-evi/overview) using the Hume React SDK, Halo uses emotionally intelligent AI to analyze conversations and provide meaningful insights.
 
