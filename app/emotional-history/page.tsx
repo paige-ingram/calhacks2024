@@ -135,6 +135,7 @@ export default function EmotionalHistory() {
   }
 
   const conversationStart = emotionAvgs.conversationStart || new Date().toISOString();
+  console.log("These are the emotion avgs: " + emotionAvgs);
   const emotionDataArray = Object.keys(emotionAvgs).map(emotion => ({
     emotion: emotion,
     intensity: emotionAvgs[emotion],
@@ -144,6 +145,9 @@ export default function EmotionalHistory() {
 
   // const weeklyAverage = calculateWeeklyAverage(emotionAvgs);
   const outliers = emotionAvgs;
+
+  // need to fix this stuff
+  const filteredEmos = emotionDataArray;
 
   return (
     <div className="container mx-auto p-4">
@@ -199,19 +203,19 @@ export default function EmotionalHistory() {
                 <EmotionBarChart data={emotionDataArray} />
               </div>
             </div>
-            <div className="bg-white p-4 shadow rounded-lg h-auto">
+            {/* <div className="bg-white p-4 shadow rounded-lg h-auto">
               <h2 className="text-xl font-semibold mb-4 text-center">Emotions Distribution</h2>
               <div className="h-80">
                 <EmotionDonutChart data={emotionDataArray} />
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="bg-white p-6 shadow rounded-lg">
+          {/* <div className="bg-white p-6 shadow rounded-lg">
             <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time</h2>
             <div className="h-96">
               <EmotionChart data={emotionDataArray} />
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>
