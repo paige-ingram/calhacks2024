@@ -1,9 +1,10 @@
 <div align="center">
-  <img src="https://storage.googleapis.com/hume-public-logos/hume/hume-banner.png" alt="Hume AI Logo">
-  <h1>Halo - Virtual Mental Wellbeing Assistant</h1>
+  <img src="https://github.com/user-attachments/assets/59be3433-6983-4e43-980c-ab2996ff84c2" alt="Halo Logo">
+  <h1>Virtual Wellbeing Companion</h1>
 </div>
 
-![Project Preview](preview.png)
+![image](https://github.com/user-attachments/assets/dea5efc4-ff14-499e-9338-9f6c52661277)
+
 
 ## Overview
 
@@ -11,14 +12,18 @@
 
 This project is built on **Next.js App Router** and integrates various advanced technologies, including the **GEMINI API** for conversation history analysis and **Google Echo** to gather and summarize emotional data. By focusing on users' mental health, Halo offers an empathetic companion that checks in, interacts, and assists in maintaining a positive emotional state.
 
+The UI/UX design is dynamic, featuring **dark mode and light mode** options to cater to user preferences and enhance readability in different environments. This ensures a visually intuitive interface for users to track their emotional history and gain insights through visualizations.
+
 ## Features
 
 - **Hume AI Integration**: Empathic Voice Interface (EVI) for emotionally intelligent conversations.
 - **GEMINI API**: Collects and summarizes user conversation history to offer personalized insights.
-- **Emotional Data Visualization**: Hume AI's emotional insights are visualized in a dashboard to help users track and reflect on their mental health.
+- **Emotional Data Visualization**: Hume AI's emotional insights are visualized in a dynamic, easy-to-navigate dashboard to help users track and reflect on their mental health.
 - **User Recognition and Personalized Care**: Uses camera and motion detection to identify users and initiate conversations.
 - **Music Recommendations**: Integrates with the Spotify API to suggest music based on the user’s emotional state.
-
+- **Arize: Phoenix**: Tracks AI model performance, providing real-time monitoring and analysis to evaluate how well the AI is performing.
+- **Dynamic UI/UX with Dark and Light Mode**: Offers both dark mode and light mode options, creating a visually appealing and responsive interface that enhances user experience.
+  
 ## Technologies Used
 
 - **Hume AI**: Empathic Voice Interface and emotional data insights.
@@ -26,7 +31,9 @@ This project is built on **Next.js App Router** and integrates various advanced 
 - **GEMINI API**: Conversation history analysis and summarization.
 - **Google Echo**: For voice interactions and summarizing insights.
 - **Spotify API**: Emotion-based music recommendations.
+- **Arize: Phoenix**: For real-time tracking and performance evaluation of AI models.
 - **Computer Vision**: Used for user recognition and motion detection.
+- **Dynamic UI/UX Design with Dark and Light Mode**: Created with React and TypeScript to offer an engaging and intuitive user experience that adapts to user preferences.
 
 ## Deployment
 
