@@ -161,7 +161,7 @@ export default function StartCall() {
                 <motion.div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2">
                   
                   {/* Launch button */}
-                  {!showCamera && (
+                  {!showCamera && !personDetected && (
                     <Button
                       className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
                       onClick={handleLaunchClick}
@@ -176,7 +176,7 @@ export default function StartCall() {
                       className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
                       ref={haloButtonRef} // Reference to auto-click
                       onClick={(e) => {
-                        createWave(e);
+                        createWave();
                         connect()
                           .then(() => {})
                           .catch(() => {})
