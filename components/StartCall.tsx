@@ -13,12 +13,14 @@ interface Wave {
 
 export default function StartCall() {
   const [showTitle, setShowTitle] = useState(true);
-  const { status, connect } = useVoice();
   const [waves, setWaves] = useState<Wave[]>([]);
+  const { status, connect } = useVoice();
+  const [buttonActive, setButtonActive] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowTitle(false);
+      setButtonActive(true);
     }, 3000); // Show and hide after 3 sec
 
     return () => clearTimeout(timer);
@@ -128,7 +130,9 @@ export default function StartCall() {
               >
                 <Button
                   className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                  disabled={!buttonActive}
                   onClick={(e) => {
+                    if (!buttonActive) return;
                     createWave(e);
                     connect()
                       .then(() => {})
