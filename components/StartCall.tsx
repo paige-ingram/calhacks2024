@@ -2,12 +2,9 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Sun } from "lucide-react";
-
 import { useState, useEffect, useRef } from "react";
 import Camera from "./Camera"; // Import Camera component for detecting a person
-
 import Link from "next/link";
-
 
 // Define the type for wave objects
 interface Wave {
@@ -23,6 +20,7 @@ export default function StartCall() {
   const [buttonActive, setButtonActive] = useState(false);
   const [showCamera, setShowCamera] = useState(false); // Show camera after clicking 'Launch'
   const [personDetected, setPersonDetected] = useState(false); // Track person detection
+  const [renderButtons, setRenderButtons] = useState(false); // Control button rendering after delay
   const haloButtonRef = useRef<HTMLButtonElement>(null); // Ref to auto-click 'Launch Halo' button
 
   useEffect(() => {
@@ -30,24 +28,18 @@ export default function StartCall() {
       setShowTitle(false);
       setButtonActive(true);
     }, 3000); // Show and hide after 3 sec
-
     return () => clearTimeout(timer);
   }, []);
 
-
-  const createWave = () => {
-
+  const createWave = (e?: React.MouseEvent<HTMLButtonElement>) => {
     const waveId = Date.now();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const maxDimension = Math.max(viewportWidth, viewportHeight);
 
     const waveSize = maxDimension * 2; // Large enough to cover the entire screen
-  
-    // Calculate the center position
     const centerX = viewportWidth / 2;
     const centerY = viewportHeight / 2;
-  
 
     const waveStyle = {
       left: `${centerX - waveSize / 2}px`,
@@ -71,7 +63,6 @@ export default function StartCall() {
       );
     }, 1200);
   };
-  
 
   // Simulate click on 'Launch Halo' after person detection
   useEffect(() => {
@@ -89,6 +80,11 @@ export default function StartCall() {
   const handlePersonDetected = () => {
     setPersonDetected(true); // Update state when person is detected
     setShowCamera(false); // Hide the camera after detection
+    
+    // Delay 2 seconds before showing the buttons
+    setTimeout(() => {
+      setRenderButtons(true); // Show buttons after 2 seconds
+    }, 2000);
   };
 
   const fetchSummary = async () => {
@@ -96,7 +92,6 @@ export default function StartCall() {
       console.log("/api/gemini"); // Using relative URL
       const response = await fetch("/api/gemini"); // No need to prepend the base URL
       const data = await response.json();
-
       const summary = JSON.parse(data.summary);
       console.log("Summary:", summary.response.candidates[0].content.parts[0].text); // Log the summary to the console
     } catch (error) {
@@ -163,6 +158,8 @@ export default function StartCall() {
                   exit: { scale: 0.5 },
                 }}
               >
+                {/* Camera for detecting a person */}
+                {showCamera && <Camera onPersonDetected={handlePersonDetected} />}
 
                 {/* Arrange buttons in the center */}
                 <motion.div
@@ -174,54 +171,72 @@ export default function StartCall() {
                     gap: "20px",
                   }}
                 >
-                  {/* Launch Halo button */}
-                  <Button
-                    className={
-                      "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
-                    }
-                    style={{ width: "300px" }}
-                    onClick={(e) => {
-                      createWave(e);
-                      connect()
-                        .then(() => {})
-                        .catch(() => {})
-                        .finally(() => {});
-                    }}
-                  >
-                    <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
-                    <span className="font-semibold">Launch Halo</span>
-                  </Button>
-
-                  {/* Gemini Insights and Emotional History buttons */}
-                  <div className="flex justify-center gap-8">
-                    {/* Emotional History button */}
-                    <Link href="/emotional-history">
-                      <Button
-                        className={
-                          "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
-                        }
-                        style={{ width: "300px" }}
-                        onClick={(e) => createWave(e)}
-                      >
-                        <span className="font-semibold">Emotional History</span>
-                      </Button>
-                    </Link>
-
-                    {/* Gemini Insights button */}
+                  {/* Launch button */}
+                  {!personDetected && !showCamera && (
                     <Button
                       className={
-                        "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
                       }
                       style={{ width: "300px" }}
+                      onClick={handleLaunchClick}
+                    >
+                      <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                      <span className="font-semibold">Launch Halo</span>
+                    </Button>
+                  )}
+
+                  {/* Launch Halo button */}
+                  {personDetected && (
+                    <Button
+                      className={
+                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
+                      }
+                      style={{ width: "300px" }}
+                      ref={haloButtonRef} // Reference to auto-click
                       onClick={(e) => {
                         createWave(e);
-                        fetchSummary();
+                        connect()
+                          .then(() => {})
+                          .catch(() => {})
+                          .finally(() => {});
                       }}
                     >
-                      <span>Gemini Insights</span>
+                      <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                      <span className="font-semibold">Launch Halo</span>
                     </Button>
-                  </div>
+                  )}
 
+                  {/* Render buttons after delay */}
+                  {renderButtons && (
+                    <div className="flex justify-center gap-8">
+                      {/* Emotional History button */}
+                      <Link href="/emotional-history">
+                        <Button
+                          className={
+                            "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                          }
+                          style={{ width: "300px" }}
+                          onClick={(e) => createWave(e)}
+                        >
+                          <span className="font-semibold">Emotional History</span>
+                        </Button>
+                      </Link>
+
+                      {/* Gemini Insights button */}
+                      <Button
+                        className={
+                          "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                        }
+                        style={{ width: "300px" }}
+                        onClick={(e) => {
+                          createWave(e);
+                          fetchSummary();
+                        }}
+                      >
+                        <span>Gemini Insights</span>
+                      </Button>
+                    </div>
+                  )}
                 </motion.div>
               </motion.div>
             </AnimatePresence>
@@ -230,27 +245,6 @@ export default function StartCall() {
             {waves.map((wave) => (
               <span key={wave.id} className={`wave-effect ${wave.type}`} style={wave.style}></span>
             ))}
-
-            <motion.div
-              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
-            >
-              <Button
-                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                onClick={(e) => {
-                  createWave(e);
-                  handleStartCall();
-                }}
-              >
-                <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
-                <span className="font-semibold">Launch Halo</span>
-              </Button>
-              <Button
-                className={"z-50 flex items-center gap-1.5"}
-                onClick={fetchSummary}
-              >
-                <span>Gemini Insights</span>
-              </Button>
-            </motion.div>
           </motion.div>
         ) : null
       )}
