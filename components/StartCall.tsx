@@ -47,6 +47,17 @@ export default function StartCall() {
     }, 1200);
   };
 
+  const fetchSummary = async () => {
+    try {
+      console.log("/api/gemini"); // Using relative URL
+      const response = await fetch("/api/gemini"); // No need to prepend the base URL
+      const data = await response.json();
+      console.log("Summary:", JSON.stringify(data)); // Log the summary to the console
+    } catch (error) {
+      console.error("Failed to fetch summary:", error);
+    }
+  };
+
   return (
     <AnimatePresence>
       {status.value !== "connected" ? (
@@ -90,6 +101,12 @@ export default function StartCall() {
                   />
                 </span>
                 <span className="font-semibold">Launch Halo</span>
+              </Button>
+              <Button
+                className={"z-50 flex items-center gap-1.5"}
+                onClick={fetchSummary}
+              >
+                <span>Gemini</span>
               </Button>
             </motion.div>
           </AnimatePresence>
