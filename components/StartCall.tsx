@@ -83,31 +83,36 @@ export default function StartCall() {
                 exit: { scale: 0.5 },
               }}
             >
-              <Button
-                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                onClick={(e) => {
-                  createWave(e);
-                  connect()
-                    .then(() => {})
-                    .catch(() => {})
-                    .finally(() => {});
-                }}
+              {/* Buttons positioned at the bottom center */}
+              <motion.div
+                className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
               >
-                <span>
-                  <Sun
-                    className={"size-5 opacity-70 text-white"}
-                    strokeWidth={2}
-                    stroke={"currentColor"}
-                  />
-                </span>
-                <span className="font-semibold">Launch Halo</span>
-              </Button>
-              <Button
-                className={"z-50 flex items-center gap-1.5"}
-                onClick={fetchSummary}
-              >
-                <span>Gemini</span>
-              </Button>
+                <Button
+                  className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                  onClick={(e) => {
+                    createWave(e);
+                    connect()
+                      .then(() => {})
+                      .catch(() => {})
+                      .finally(() => {});
+                  }}
+                >
+                  <span>
+                    <Sun
+                      className={"size-5 opacity-70 text-white"}
+                      strokeWidth={2}
+                      stroke={"currentColor"}
+                    />
+                  </span>
+                  <span className="font-semibold">Launch Halo</span>
+                </Button>
+                <Button
+                  className={"z-50 flex items-center gap-1.5"}
+                  onClick={fetchSummary}
+                >
+                  <span>Gemini Insights</span>
+                </Button>
+              </motion.div>
             </motion.div>
           </AnimatePresence>
 
