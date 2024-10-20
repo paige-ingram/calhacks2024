@@ -1,8 +1,9 @@
 "use client"; // Ensure this is a client-side component
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import FaceRecognition from "@/components/FaceRecognition";
+
 
 // Dynamically load Chat component for client-side only
 const Chat = dynamic(() => import("@/components/Chat"), {
@@ -23,29 +24,27 @@ async function fetchAccessToken() {
 
 export default function Page() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [personName, setPersonName] = useState<string | null>(null); // Store the detected person's name
 
-  // Handle person detection and face recognition
-  const handlePersonRecognized = async (name: string) => {
-    const token = await fetchAccessToken();
-    setAccessToken(token);
-    setPersonName(name); // Set the detected person's name
-  };
+
+  // Fetch access token immediately when the component mounts
+  useEffect(() => {
+    const getAccessToken = async () => {
+      const token = await fetchAccessToken();
+      setAccessToken(token);
+    };
+    
+    getAccessToken(); // Fetch the token on component mount
+  }, []);
 
   return (
     <div className="grow flex flex-col">
-      {/* Show the FaceRecognition component if no person has been recognized yet */}
-      {!personName && (
-        <FaceRecognition onPersonDetected={handlePersonRecognized} />
-      )}
+      {/* Render Chat once accessToken is available */}
+      {accessToken ? (
+        <Chat accessToken={accessToken} />
+      ) : (
+        <p></p>
 
-      {/* Once person is recognized and accessToken is available, show Chat and Start Call button */}
-      {personName && accessToken && (
-        <>
-          <p>Welcome, {personName}!</p>
-          <Chat accessToken={accessToken} />
-          
-        </>
+  
       )}
     </div>
   );
