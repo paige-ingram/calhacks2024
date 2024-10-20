@@ -32,7 +32,7 @@ interface EmotionScores {
 }
 
 const calculateEmotionAverages = (data: any[]) => {
-  console.log("This is what the data looks like: " + data);
+  console.log("This is what the data looks like: " + JSON.stringify(data));
   const emotionSums: EmotionScores = {};
   const emotionCounts: EmotionScores = {};
   let conversationStart: string | null = null;
@@ -207,20 +207,20 @@ export default function EmotionalHistory() {
                 <EmotionBarChart data={emotionDataArray} />
               </div>
             </div>
-            <div className="bg-white p-4 shadow rounded-lg h-auto">
+            {/* <div className="bg-white p-4 shadow rounded-lg h-auto">
               <h2 className="text-xl font-semibold mb-4 text-center">Emotions Distribution</h2>
               <div className="h-80">
                 <EmotionDonutChart data={emotionDataArray} />
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="bg-white p-6 shadow rounded-lg">
+          {/* <div className="bg-white p-6 shadow rounded-lg">
             
             <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time</h2>
             <div className="h-96">
               <EmotionChart data={emotionDataArray} />
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>

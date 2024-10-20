@@ -10,6 +10,7 @@ import {
   Legend,
   Filler,
   TimeScale,
+  ChartOptions,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns'; // Import the date-fns adapter to handle time scales
 
@@ -46,16 +47,17 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     ],
   };
 
-  const options = {
+  // Define the options type using ChartOptions for better TypeScript support
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false, // Ensure chart is responsive
     plugins: {
       legend: {
-        position: 'top' as const, // Ensure proper typing
+        position: 'top', // Correct typing for 'position'
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context) {
             let label = context.label || '';
             if (label) {
               label += ': ';
@@ -71,7 +73,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     },
     scales: {
       x: {
-        type: 'time',
+        type: 'time', // Specify the correct type for time-based scale
         time: {
           unit: 'minute', // Granularity of the X-axis labels
           tooltipFormat: 'MMM d, h:mm a', // Tooltip format
