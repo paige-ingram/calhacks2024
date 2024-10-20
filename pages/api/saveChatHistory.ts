@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({ message: 'Chat history saved successfully!', result });
   } catch (error) {
-    console.error('Error saving chat history:', error.message);  // Log the actual error
-    return res.status(500).json({ message: 'Error saving chat history', error: error.message });
+    console.error('Error saving chat history:', error);  // Log the actual error
+    return res.status(500).json({ message: 'Error saving chat history', error: error });
   }
 }
