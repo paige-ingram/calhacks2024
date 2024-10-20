@@ -5,11 +5,10 @@ import {
   LineElement,
   PointElement,
   LinearScale,
-  CategoryScale,
+  TimeScale, // Import TimeScale for time-based data
   Tooltip,
   Legend,
   Filler,
-  TimeScale,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns'; // Import the date-fns adapter to handle time scales
 
@@ -18,11 +17,10 @@ ChartJS.register(
   LineElement,
   PointElement,
   LinearScale,
-  CategoryScale,
+  TimeScale, // Register the TimeScale for x-axis
   Tooltip,
   Legend,
-  Filler,
-  TimeScale // For time-based scales (x-axis)
+  Filler
 );
 
 interface EmotionChartProps {
@@ -36,7 +34,10 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     datasets: [
       {
         label: 'Emotion Intensity',
-        data: data.map((item) => ({ x: new Date(item.timestamp), y: item.intensity })), // Ensure each entry has x (time) and y (intensity)
+        data: data.map((item) => ({
+          x: new Date(item.timestamp),
+          y: item.intensity,
+        })), // Ensure each entry has x (time) and y (intensity)
         borderColor: '#4caf50', // Line color
         backgroundColor: 'rgba(76, 175, 80, 0.2)', // Fill color under the line
         pointRadius: 5, // Radius of data points
@@ -73,7 +74,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     },
     scales: {
       x: {
-        type: 'timeseries',
+        type: 'time', // Corrected type for time-based data
         time: {
           unit: 'minute', // Granularity of the X-axis labels
           tooltipFormat: 'MMM d, h:mm a', // Tooltip format
