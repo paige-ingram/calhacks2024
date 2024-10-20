@@ -1,45 +1,67 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
+import { MongoClient } from 'mongodb';
 
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const uri = process.env.MONGODB_URI as string;
+const db = new MongoClient(uri);
 
-const readChatHistory = () => {
-  const directoryPath = path.join(process.cwd(), 'public/chat_history');
-  const files = fs.readdirSync(directoryPath).filter(file => file.endsWith('.json'));
-// Sort files by date in descending order to get the most recent file
-  files.sort((a, b) => {
-    const timeA = new Date(a.split('.json')[0]).getTime();
-    const timeB = new Date(b.split('.json')[0]).getTime();
-    return timeB - timeA;
-  });
+const readChatHistory = async () => {
+  await db.connect();
+  const database = db.db('calhacksdb');
+  const collection = database.collection('chatHistories');
 
-  // Path to the most recent file
-  const mostRecentFile = path.join(directoryPath, files[0]);
+  const allDocs = await collection.find({}).toArray();
+  // console.log("Here are all the docs: " + JSON.stringify(allDocs));
+  
+  // get most recent timestamp
+  const mostRecentChat = await collection
+      .find({})
+      .sort({ timestamp: -1 })  // Sort by timestamp in descending order
+      .limit(1)                 // Limit the result to 1 document
+      .toArray(); 
 
-  // Read and parse the most recent file
-  const jsonData = fs.readFileSync(mostRecentFile, 'utf-8');
-  const chatHistory = JSON.parse(jsonData);
+  if (mostRecentChat.length === 0) {
+      console.log("No chat histories found.");
+      return [];
+  }
 
-  // Extract role and content from messages
-  const messages = chatHistory
-    .filter((item: { type: string; }) => item.type === "assistant_message" || item.type === "user_message") // Filter for relevant message types
-    .map((item: { message: { role: any; content: any; }; }) => {
-      const { role, content } = item.message;
-      return `${role}: ${content}`; // Format as "role: content"
-    })
-    .join('\n'); // Join all messages into a single string with new lines
+  // console.log("Here are the most recent chats: " + JSON.stringify(mostRecentChat));
+  
+  // close db when complete
+  // await db.close();
 
-  return messages;
+  const parseChatLog = (mostRecentChat: any): string[] => {
+    // Parse the JSON string to an object
+
+    // maybe should do this instead 
+    // const parsedData = JSON.parse(mostRecentChat);
+    // const chatHistory = parsedData[0].chatHistory;
+
+    const chatHistory = mostRecentChat.chatHistory;
+
+    // Filter and map to get the type and content of the relevant messages
+    const simplifiedLog: string[] = chatHistory
+      .filter((item: any) => item.type === "assistant_message" || item.type === "user_message")
+      .map((item: any) => `${item.type}: ${item.message.content}`);
+  
+    console.log("here is the simplified log: " + simplifiedLog);
+    return simplifiedLog;
+
+  };
+
+  return parseChatLog(mostRecentChat[0]);
 };
 
 
 // Handler to fetch chat history and generate content
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const textData = readChatHistory();
+  const textData = await readChatHistory();
+  console.log("YAY here is the text data sent to gemini: " + textData);
   try {
     // Read chat history data
     // const textData = readChatHistory();
@@ -58,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       ]
     });
-    console.log(JSON.stringify(result));
+    // console.log(JSON.stringify(result));
     
     // Send the result back in the response
     res.status(200).json({ summary: JSON.stringify(result) });
