@@ -96,8 +96,8 @@ export default function EmotionalHistory() {
       }
         
       // Fetch recommended music if logged in
-      if (loggedIn && data.weekEmotions.length > 0) {
-        const firstEmotion = data.weekEmotions[0].emotion;
+      if (loggedIn && data.length > 0) {
+        const firstEmotion = "happiness";
         const music = await fetchRecommendedMusic(firstEmotion);
         setRecommendedMusic(music);
       }
