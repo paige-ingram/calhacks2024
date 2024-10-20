@@ -5,6 +5,8 @@ import Messages from "./Messages";
 import Controls from "./Controls";
 import StartCall from "./StartCall";
 import { ComponentRef, useRef } from "react";
+import Link from "next/link";  // Import Link from next/link
+import { Button } from './ui/button'; 
 
 export default function ClientComponent({
   accessToken,
@@ -14,9 +16,8 @@ export default function ClientComponent({
   const timeout = useRef<number | null>(null);
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
 
-  // optional: use configId from environment variable
   const configId = process.env['NEXT_PUBLIC_HUME_CONFIG_ID'];
-  
+
   return (
     <div
       className={
@@ -46,6 +47,17 @@ export default function ClientComponent({
         <Messages ref={ref} />
         <Controls />
         <StartCall />
+
+        {/* Button to navigate to the emotional history */}
+        <div className="mt-4">
+          <Link href="/emotional-history">
+            <Button
+              className="glow-button z-50 flex items-center gap-2 px-6 py-3 relative"
+            >
+              <span className="font-semibold">View Emotional History</span>
+            </Button>
+          </Link>
+        </div>
       </VoiceProvider>
     </div>
   );
