@@ -1,9 +1,18 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/59be3433-6983-4e43-980c-ab2996ff84c2" alt="Halo Logo">
+  <img src="https://github.com/user-attachments/assets/59be3433-6983-4e43-980c-ab2996ff84c2" alt="Halo Logo" width="150px">
   <h1>Virtual Wellbeing Companion</h1>
 </div>
 
+---
+
 ![image](https://github.com/user-attachments/assets/dea5efc4-ff14-499e-9338-9f6c52661277)
+
+---
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/40ce5edc-c877-4275-b3bf-406ef55d6338" alt="LLM Talk" style="width: 45%; height: 250px; object-fit: cover;"/>
+  <img src="https://github.com/user-attachments/assets/9785a5b1-af01-4b8c-81b9-b94855be8591" alt="Gemini Insights" style="width: 45%; height: 250px; object-fit: cover;"/>
+</div>
 
 
 ## Overview
