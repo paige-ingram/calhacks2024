@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import FaceRecognition from "@/components/FaceRecognition";
 
+
+// Dynamically load Chat component for client-side only
 const Chat = dynamic(() => import("@/components/Chat"), {
   ssr: false, // Only load on the client-side
 });
 
+// Fetch Hume Access Token
 async function fetchAccessToken() {
-  const baseUrl = 
+  const baseUrl =
     typeof window === 'undefined'
       ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
       : '';
@@ -20,6 +24,7 @@ async function fetchAccessToken() {
 
 export default function Page() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+
 
   // Fetch access token immediately when the component mounts
   useEffect(() => {
@@ -38,6 +43,8 @@ export default function Page() {
         <Chat accessToken={accessToken} />
       ) : (
         <p></p>
+
+  
       )}
     </div>
   );

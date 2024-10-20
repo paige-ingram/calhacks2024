@@ -2,8 +2,12 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Sun } from "lucide-react";
+
 import { useState, useEffect, useRef } from "react";
 import Camera from "./Camera"; // Import Camera component for detecting a person
+
+import Link from "next/link";
+
 
 // Define the type for wave objects
 interface Wave {
@@ -15,7 +19,7 @@ interface Wave {
 export default function StartCall() {
   const [showTitle, setShowTitle] = useState(true);
   const [waves, setWaves] = useState<Wave[]>([]);
-  const { status, connect } = useVoice();
+  const { status, connect } = useVoice(); // One hook for voice management
   const [buttonActive, setButtonActive] = useState(false);
   const [showCamera, setShowCamera] = useState(false); // Show camera after clicking 'Launch'
   const [personDetected, setPersonDetected] = useState(false); // Track person detection
@@ -30,33 +34,35 @@ export default function StartCall() {
     return () => clearTimeout(timer);
   }, []);
 
+
   const createWave = () => {
+
     const waveId = Date.now();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const maxDimension = Math.max(viewportWidth, viewportHeight);
+
     const waveSize = maxDimension * 2; // Large enough to cover the entire screen
   
     // Calculate the center position
     const centerX = viewportWidth / 2;
     const centerY = viewportHeight / 2;
   
+
     const waveStyle = {
       left: `${centerX - waveSize / 2}px`,
       top: `${centerY - waveSize / 2}px`,
       width: `${waveSize}px`,
       height: `${waveSize}px`,
     };
-  
-    // Create multiple waves with different classes
+
     setWaves((prevWaves) => [
       ...prevWaves,
       { id: waveId, style: waveStyle, type: "primary" },
       { id: waveId + 1, style: waveStyle, type: "secondary" },
       { id: waveId + 2, style: waveStyle, type: "tertiary" },
     ]);
-  
-    // Remove the waves after the animation ends
+
     setTimeout(() => {
       setWaves((prevWaves) =>
         prevWaves.filter(
@@ -90,7 +96,9 @@ export default function StartCall() {
       console.log("/api/gemini"); // Using relative URL
       const response = await fetch("/api/gemini"); // No need to prepend the base URL
       const data = await response.json();
-      console.log("Summary:", JSON.stringify(data)); // Log the summary to the console
+
+      const summary = JSON.parse(data.summary);
+      console.log("Summary:", summary.response.candidates[0].content.parts[0].text); // Log the summary to the console
     } catch (error) {
       console.error("Failed to fetch summary:", error);
     }
@@ -100,7 +108,7 @@ export default function StartCall() {
     <AnimatePresence>
       {showTitle ? (
         // Intro logo pop-in
-        <div className="relative flex justify-center items-center" style={{ height: '100vh' }}>
+        <div className="relative flex justify-center items-center" style={{ height: "100vh" }}>
           <motion.div
             className="absolute left-0 top-0"
             initial={{ width: 0 }}
@@ -108,25 +116,26 @@ export default function StartCall() {
             exit={{ width: 0 }}
             transition={{ duration: 2 }}
             style={{
-              overflow: 'hidden',
-              background: 'linear-gradient(to right, rgba(255, 215, 0, 0) 0%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0) 100%)'
+              overflow: "hidden",
+              background:
+                "linear-gradient(to right, rgba(255, 215, 0, 0) 0%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0) 100%)",
             }}
           />
           <motion.img
-            src="halo_logo.png" 
+            src="halo_logo.png"
             alt="Halo logo"
-            className="z-10" 
-            initial={{ clipPath: 'inset(0 100% 0 0)' }} // Fade reveal, left to right
-            animate={{ clipPath: 'inset(0 0 0 0)' }} 
-            exit={{ clipPath: 'inset(0 100% 0 0)' }} 
+            className="z-10"
+            initial={{ clipPath: "inset(0 100% 0 0)" }} // Fade reveal, left to right
+            animate={{ clipPath: "inset(0 0 0 0)" }}
+            exit={{ clipPath: "inset(0 100% 0 0)" }}
             transition={{ duration: 2 }}
             style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -60%)',
-              width: 'auto', 
-              height: 'auto', 
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -60%)",
+              width: "auto",
+              height: "auto",
             }}
           />
         </div>
@@ -154,65 +163,94 @@ export default function StartCall() {
                   exit: { scale: 0.5 },
                 }}
               >
-                {/* Camera for detecting a person */}
-                {showCamera && <Camera onPersonDetected={handlePersonDetected} />}
 
-                {/* Buttons positioned at the bottom center */}
-                <motion.div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2">
-                  
-                  {/* Launch button */}
-                  {!showCamera && !personDetected && (
-                    <Button
-                      className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                      onClick={handleLaunchClick}
-                    >
-                      <span>Launch</span>
-                    </Button>
-                  )}
-
+                {/* Arrange buttons in the center */}
+                <motion.div
+                  className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col items-center"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "20px",
+                  }}
+                >
                   {/* Launch Halo button */}
-                  {personDetected && (
+                  <Button
+                    className={
+                      "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
+                    }
+                    style={{ width: "300px" }}
+                    onClick={(e) => {
+                      createWave(e);
+                      connect()
+                        .then(() => {})
+                        .catch(() => {})
+                        .finally(() => {});
+                    }}
+                  >
+                    <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                    <span className="font-semibold">Launch Halo</span>
+                  </Button>
+
+                  {/* Gemini Insights and Emotional History buttons */}
+                  <div className="flex justify-center gap-8">
+                    {/* Emotional History button */}
+                    <Link href="/emotional-history">
+                      <Button
+                        className={
+                          "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                        }
+                        style={{ width: "300px" }}
+                        onClick={(e) => createWave(e)}
+                      >
+                        <span className="font-semibold">Emotional History</span>
+                      </Button>
+                    </Link>
+
+                    {/* Gemini Insights button */}
                     <Button
-                      className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                      ref={haloButtonRef} // Reference to auto-click
+                      className={
+                        "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                      }
+                      style={{ width: "300px" }}
                       onClick={(e) => {
-                        createWave();
-                        connect()
-                          .then(() => {})
-                          .catch(() => {})
-                          .finally(() => {});
+                        createWave(e);
+                        fetchSummary();
                       }}
                     >
-                      <span>
-                        <Sun
-                          className={"size-5 opacity-70 text-white"}
-                          strokeWidth={2}
-                          stroke={"currentColor"}
-                        />
-                      </span>
-                      <span className="font-semibold">Launch Halo</span>
+                      <span>Gemini Insights</span>
                     </Button>
-                  )}
+                  </div>
 
-                  {/* Fetch summary button */}
-                  <Button
-                    className={"z-50 flex items-center gap-1.5"}
-                    onClick={fetchSummary}
-                  >
-                    <span>Gemini Insights</span>
-                  </Button>
                 </motion.div>
               </motion.div>
             </AnimatePresence>
 
-            {/* Render the waves, which will cover the whole page and have multiple ripples */}
+            {/* Render the waves, which will cover the page and have multiple ripples */}
             {waves.map((wave) => (
-              <span
-                key={wave.id}
-                className={`wave-effect ${wave.type}`}
-                style={wave.style}
-              ></span>
+              <span key={wave.id} className={`wave-effect ${wave.type}`} style={wave.style}></span>
             ))}
+
+            <motion.div
+              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+            >
+              <Button
+                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                onClick={(e) => {
+                  createWave(e);
+                  handleStartCall();
+                }}
+              >
+                <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                <span className="font-semibold">Launch Halo</span>
+              </Button>
+              <Button
+                className={"z-50 flex items-center gap-1.5"}
+                onClick={fetchSummary}
+              >
+                <span>Gemini Insights</span>
+              </Button>
+            </motion.div>
           </motion.div>
         ) : null
       )}

@@ -37,4 +37,7 @@ package-lock.json
 .env
 .env*.local
 
-public/chat_history
+
+
+/public/chat_history/
+
