@@ -8,11 +8,11 @@ import {
   Tooltip,
   Legend,
   Filler,
-  TimeScale,   // Import TimeScale for time-based data
+  TimeScale, // Make sure TimeScale is registered correctly
 } from 'chart.js';
-import 'chartjs-adapter-date-fns';
+import 'chartjs-adapter-date-fns'; // Import date-fns adapter for time scales
 
-// Register required Chart.js components
+// Register required Chart.js elements
 ChartJS.register(
   LineElement,
   PointElement,
@@ -21,7 +21,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   Filler,
-  TimeScale // Correctly register TimeScale for date formatting
+  TimeScale // Register TimeScale for time-based data
 );
 
 interface EmotionChartProps {
@@ -52,7 +52,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     maintainAspectRatio: false, // Ensure chart is responsive
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top', // Use a valid predefined value like 'top', 'bottom', 'left', or 'right'
       },
       tooltip: {
         callbacks: {
