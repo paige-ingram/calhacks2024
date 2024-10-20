@@ -175,7 +175,7 @@ export default function StartCall() {
                   {!personDetected && !showCamera && (
                     <Button
                       className={
-                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
+                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out text-xl"
                       }
                       style={{ width: "300px" }}
                       onClick={handleLaunchClick}
@@ -189,7 +189,7 @@ export default function StartCall() {
                   {personDetected && (
                     <Button
                       className={
-                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out"
+                        "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full relative hover:scale-110 transition-all duration-300 ease-in-out text-xl"
                       }
                       style={{ width: "300px" }}
                       ref={haloButtonRef} // Reference to auto-click
@@ -213,7 +213,7 @@ export default function StartCall() {
                       <Link href="/emotional-history">
                         <Button
                           className={
-                            "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                            "glow-button z-50 flex items-center justify-center gap-2 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out text-xl"
                           }
                           style={{ width: "300px" }}
                           onClick={(e) => createWave(e)}
@@ -226,7 +226,7 @@ export default function StartCall() {
                       {/* Gemini Insights button */}
                       <Button
                         className={
-                          "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out"
+                          "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out text-xl"
                         }
                         style={{ width: "300px" }}
                         onClick={(e) => {
