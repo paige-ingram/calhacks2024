@@ -14,7 +14,7 @@ interface Wave {
 export default function StartCall() {
   const [showTitle, setShowTitle] = useState(true);
   const [waves, setWaves] = useState<Wave[]>([]);
-  const { status, connect } = useVoice();
+  const { status, connect } = useVoice(); // One hook for voice management
   const [buttonActive, setButtonActive] = useState(false);
 
   useEffect(() => {
@@ -25,6 +25,15 @@ export default function StartCall() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleStartCall = async () => {
+    try {
+      console.log("Attempting to connect...");
+      await connect();
+    } catch (error) {
+      console.error("Failed to start call:", error);
+    }
+  };
 
   const createWave = (e: React.MouseEvent<HTMLButtonElement>) => {
     const waveId = Date.now();
@@ -40,7 +49,6 @@ export default function StartCall() {
       height: `${waveSize}px`,
     };
 
-    // Create multiple waves with different classes
     setWaves((prevWaves) => [
       ...prevWaves,
       { id: waveId, style: waveStyle, type: "primary" },
@@ -48,7 +56,6 @@ export default function StartCall() {
       { id: waveId + 2, style: waveStyle, type: "tertiary" },
     ]);
 
-    // Remove the waves after the animation ends
     setTimeout(() => {
       setWaves((prevWaves) =>
         prevWaves.filter(
@@ -64,7 +71,7 @@ export default function StartCall() {
       const response = await fetch("/api/gemini"); // No need to prepend the base URL
       const data = await response.json();
 
-      const summary = JSON.parse(data.summary)
+      const summary = JSON.parse(data.summary);
       console.log("Summary:", summary.response.candidates[0].content.parts[0].text); // Log the summary to the console
     } catch (error) {
       console.error("Failed to fetch summary:", error);
@@ -84,29 +91,28 @@ export default function StartCall() {
             transition={{ duration: 2 }}
             style={{
               overflow: 'hidden',
-              background: 'linear-gradient(to right, rgba(255, 215, 0, 0) 0%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0) 100%)'
+              background: 'linear-gradient(to right, rgba(255, 215, 0, 0) 0%, rgba(255, 215, 0, 1) 50%, rgba(255, 215, 0, 0) 100%)',
             }}
           />
           <motion.img
-            src="halo_logo.png" 
+            src="halo_logo.png"
             alt="Halo logo"
-            className="z-10" 
+            className="z-10"
             initial={{ clipPath: 'inset(0 100% 0 0)' }} // Fade reveal, left to right
-            animate={{ clipPath: 'inset(0 0 0 0)' }} 
-            exit={{ clipPath: 'inset(0 100% 0 0)' }} 
+            animate={{ clipPath: 'inset(0 0 0 0)' }}
+            exit={{ clipPath: 'inset(0 100% 0 0)' }}
             transition={{ duration: 2 }}
             style={{
               position: 'absolute',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -60%)',
-              width: 'auto', 
-              height: 'auto', 
+              width: 'auto',
+              height: 'auto',
             }}
           />
         </div>
-      ) : ( 
-
+      ) : (
         status.value !== "connected" ? (
           <motion.div
             className={"fixed inset-0 p-4 flex items-center justify-center bg-background"}
@@ -119,51 +125,7 @@ export default function StartCall() {
               exit: { opacity: 0 },
             }}
           >
-            {/* Northern Lights Background */}
-            <div className="northern-lights"></div>
-
-          <AnimatePresence>
-            <motion.div
-              variants={{
-                initial: { scale: 0.5 },
-                enter: { scale: 1 },
-                exit: { scale: 0.5 },
-              }}
-            >
-              {/* Buttons positioned at the bottom center */}
-              <motion.div
-                className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
-              >
-                <Button
-                  className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                  onClick={(e) => {
-                    createWave(e);
-                    connect()
-                      .then(() => {})
-                      .catch(() => {})
-                      .finally(() => {});
-                  }}
-                >
-                  <span>
-                    <Sun
-                      className={"size-5 opacity-70 text-white"}
-                      strokeWidth={2}
-                      stroke={"currentColor"}
-                    />
-                  </span>
-                  <span className="font-semibold">Launch Halo</span>
-                </Button>
-                <Button
-                  className={"z-50 flex items-center gap-1.5"}
-                  onClick={fetchSummary}
-                >
-                  <span>Gemini Insights</span>
-                </Button>
-              </motion.div>
-            </motion.div>
-          </AnimatePresence>
-
-            {/* Render the waves, which will cover the whole page and have multiple ripples */}
+            {/* Render the waves */}
             {waves.map((wave) => (
               <span
                 key={wave.id}
@@ -171,6 +133,27 @@ export default function StartCall() {
                 style={wave.style}
               ></span>
             ))}
+
+            <motion.div
+              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+            >
+              <Button
+                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                onClick={(e) => {
+                  createWave(e);
+                  handleStartCall();
+                }}
+              >
+                <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                <span className="font-semibold">Launch Halo</span>
+              </Button>
+              <Button
+                className={"z-50 flex items-center gap-1.5"}
+                onClick={fetchSummary}
+              >
+                <span>Gemini Insights</span>
+              </Button>
+            </motion.div>
           </motion.div>
         ) : null
       )}
