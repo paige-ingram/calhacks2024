@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs";
+import './Camera.css';
 
 const Camera = ({ onPersonDetected }: { onPersonDetected: () => void }) => {
   const webcamRef = useRef<Webcam>(null);
@@ -19,11 +20,7 @@ const Camera = ({ onPersonDetected }: { onPersonDetected: () => void }) => {
 
   // Detect motion (i.e., detect a person using COCO-SSD)
   const detectMotion = async () => {
-    if (
-      webcamRef.current &&
-      webcamRef.current.video?.readyState === 4 &&
-      model
-    ) {
+    if (webcamRef.current && webcamRef.current.video?.readyState === 4 && model) {
       const video = webcamRef.current.video;
       const predictions = await model.detect(video);
 
@@ -47,11 +44,11 @@ const Camera = ({ onPersonDetected }: { onPersonDetected: () => void }) => {
   }, [model]);
 
   return (
-    <div className="camera-container">
+    <div className={`camera-container ${personDetected ? 'person-detected' : ''}`}>
       {!personDetected && (
         <>
-          <Webcam ref={webcamRef} style={{ width: "100%", height: "auto" }} />
-          <p>Detecting motion...</p>
+          <Webcam ref={webcamRef} className="webcam-view" />
+          <p className="detecting-text">Detecting motion...</p>
         </>
       )}
     </div>
