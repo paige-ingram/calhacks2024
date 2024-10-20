@@ -7,7 +7,6 @@ import EmotionChart from '@/components/EmotionChart';
 import EmotionDonutChart from '@/components/EmotionDonutChart';
 import SpotifyLoginButton from '@/components/ui/SpotifyLoginButton';
 import { fetchRecommendedMusic } from '@/lib/spotify';
-
 // Color mapping for emotions
 const emotionColors: Record<string, string> = {
   happy: "yellow",
@@ -18,12 +17,9 @@ const emotionColors: Record<string, string> = {
 // Fetch data using fetch API
 const fetchEmotionData = async () => {
   try {
-    const baseurl = '/chat_history/';
-    const fileName = '2024-10-19T20:51:44.785Z.json';
-    console.log("Fetching data from:", `${baseurl}${fileName}`);
-    const response = await fetch(`${baseurl}${fileName}`);
-    const data = await response.json();
-    console.log("Fetched data:", data);
+    const response = await fetch('/api/getEmotionData'); // Calls the new API route
+    const data = await response.json(); // Parse the JSON response
+    console.log("Fetched data from MongoDB:", data);
     return data;
   } catch (error) {
     console.error('Failed to fetch emotion data:', error);
@@ -36,39 +32,43 @@ interface EmotionScores {
 }
 
 const calculateEmotionAverages = (data: any[]) => {
+  console.log("This is what the data looks like: " + JSON.stringify(data));
   const emotionSums: EmotionScores = {};
   const emotionCounts: EmotionScores = {};
   let conversationStart: string | null = null;
 
-  // Filtering user messages and aggregating emotion scores
   data.forEach(entry => {
-    if (!conversationStart && entry.type === 'user_message' && entry.models && entry.models.prosody && entry.models.prosody.scores) {
-      conversationStart = entry.receivedAt;
-    }
-    if (entry.type === 'user_message' && entry.models && entry.models.prosody && entry.models.prosody.scores) {
-      const scores = entry.models.prosody.scores;
-      Object.keys(scores).forEach(emotion => {
-        if (!emotionSums.hasOwnProperty(emotion)) {
-          emotionSums[emotion] = 0;
-          emotionCounts[emotion] = 0;
+    if (entry.chatHistory) {
+      entry.chatHistory.forEach((item: any) => {
+        if (item.type === 'user_message' && item.models && item.models.prosody && item.models.prosody.scores) {
+          if (!conversationStart) conversationStart = item.receivedAt;
+          const scores = item.models.prosody.scores;
+          Object.keys(scores).forEach(emotion => {
+            if (!emotionSums.hasOwnProperty(emotion)) {
+              emotionSums[emotion] = 0;
+              emotionCounts[emotion] = 0;
+            }
+            emotionSums[emotion] += scores[emotion];
+            emotionCounts[emotion]++;
+          });
         }
-        emotionSums[emotion] += scores[emotion];
-        emotionCounts[emotion]++;
       });
     }
   });
 
-  // Calculating averages for each emotion
   const emotionAverages: EmotionScores = {};
   Object.keys(emotionSums).forEach(emotion => {
-    emotionAverages[emotion] = emotionSums[emotion] / emotionCounts[emotion];
+    if (emotionCounts[emotion] > 0) {
+      emotionAverages[emotion] = emotionSums[emotion] / emotionCounts[emotion];
+    }
   });
 
   return {
-    conversationStart, // Adds the conversation start timestamp
+    conversationStart,
     ...emotionAverages
   };
 };
+
 
 // // Example of usage with your provided data
 // const emotionData: any[] = [
@@ -136,14 +136,16 @@ export default function EmotionalHistory() {
 
   const conversationStart = emotionAvgs.conversationStart || new Date().toISOString();
   console.log("These are the emotion avgs: " + emotionAvgs);
+  
   const emotionDataArray = Object.keys(emotionAvgs)
-  .filter(emotion => emotion !== 'conversationStart')
-  .map(emotion => ({
+  .filter(emotion => emotion !== 'conversationStart') // Exclude 'conversationStart'
+  .map((emotion, index) => ({
     emotion: emotion,
     intensity: emotionAvgs[emotion],
-    timestamp: conversationStart
+    timestamp: new Date(new Date(emotionAvgs.conversationStart).getTime() + index * 60000).toISOString(), // Increment time by 1 minute for each entry
   }));
   console.log("here is emotion data array: " + JSON.stringify(emotionDataArray));
+  
 
   // const weeklyAverage = calculateWeeklyAverage(emotionAvgs);
   const outliers = emotionAvgs;
@@ -213,6 +215,7 @@ export default function EmotionalHistory() {
             </div> */}
           </div>
           {/* <div className="bg-white p-6 shadow rounded-lg">
+            
             <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time</h2>
             <div className="h-96">
               <EmotionChart data={emotionDataArray} />
