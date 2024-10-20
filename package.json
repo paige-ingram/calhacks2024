@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@arizeai/openinference-instrumentation-openai": "^0.5.0",
     "@arizeai/openinference-semantic-conventions": "^0.10.0",
     "@google/generative-ai": "^0.21.0",
     "@humeai/voice-react": "^0.1.15",

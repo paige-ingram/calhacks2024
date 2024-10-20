@@ -1,14 +1,31 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { Resource } from '@opentelemetry/resources';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { registerInstrumentations } from "@opentelemetry/instrumentation";
+import { OpenAIInstrumentation } from "@arizeai/openinference-instrumentation-openai";
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { diag, DiagConsoleLogger, DiagLogLevel } from "@opentelemetry/api";
 
+// Set logger for debugging
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
+
+// Initialize the tracer provider
 const sdk = new NodeSDK({
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'Halo',
-    [SemanticResourceAttributes.SERVICE_VERSION]: '1.0',
+    service: {
+      name: 'gemini-service',
+    },
   }),
-  traceExporter: new ConsoleSpanExporter(),
+  traceExporter: new ConsoleSpanExporter(),  // Exports spans to the console
 });
 
 sdk.start();
+
+// Register Arize instrumentation
+registerInstrumentations({
+  instrumentations: [
+    new OpenAIInstrumentation({}),
+  ],
+});
+
+console.log("👀 Arize Tracing initialized!");
