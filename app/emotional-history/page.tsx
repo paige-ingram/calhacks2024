@@ -136,7 +136,9 @@ export default function EmotionalHistory() {
 
   const conversationStart = emotionAvgs.conversationStart || new Date().toISOString();
   console.log("These are the emotion avgs: " + emotionAvgs);
-  const emotionDataArray = Object.keys(emotionAvgs).map(emotion => ({
+  const emotionDataArray = Object.keys(emotionAvgs)
+  .filter(emotion => emotion !== 'conversationStart')
+  .map(emotion => ({
     emotion: emotion,
     intensity: emotionAvgs[emotion],
     timestamp: conversationStart
