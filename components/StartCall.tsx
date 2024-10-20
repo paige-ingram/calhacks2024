@@ -15,7 +15,7 @@ interface Wave {
 export default function StartCall() {
   const [showTitle, setShowTitle] = useState(true);
   const [waves, setWaves] = useState<Wave[]>([]);
-  const { status, connect } = useVoice();
+  const { status, connect } = useVoice(); // One hook for voice management
   const [buttonActive, setButtonActive] = useState(false);
 
   useEffect(() => {
@@ -26,6 +26,15 @@ export default function StartCall() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleStartCall = async () => {
+    try {
+      console.log("Attempting to connect...");
+      await connect();
+    } catch (error) {
+      console.error("Failed to start call:", error);
+    }
+  };
 
   const createWave = (e: React.MouseEvent<HTMLButtonElement>) => {
     const waveId = Date.now();
@@ -41,7 +50,6 @@ export default function StartCall() {
       height: `${waveSize}px`,
     };
 
-    // Create multiple waves with different classes
     setWaves((prevWaves) => [
       ...prevWaves,
       { id: waveId, style: waveStyle, type: "primary" },
@@ -49,7 +57,6 @@ export default function StartCall() {
       { id: waveId + 2, style: waveStyle, type: "tertiary" },
     ]);
 
-    // Remove the waves after the animation ends
     setTimeout(() => {
       setWaves((prevWaves) =>
         prevWaves.filter(
@@ -196,6 +203,27 @@ export default function StartCall() {
             {waves.map((wave) => (
               <span key={wave.id} className={`wave-effect ${wave.type}`} style={wave.style}></span>
             ))}
+
+            <motion.div
+              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+            >
+              <Button
+                className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                onClick={(e) => {
+                  createWave(e);
+                  handleStartCall();
+                }}
+              >
+                <Sun className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+                <span className="font-semibold">Launch Halo</span>
+              </Button>
+              <Button
+                className={"z-50 flex items-center gap-1.5"}
+                onClick={fetchSummary}
+              >
+                <span>Gemini Insights</span>
+              </Button>
+            </motion.div>
           </motion.div>
         ) : null
       )}
