@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'; // Import the core Chart.js class
+
+interface EmotionData {
+  emotion: string;
+  intensity: number;
+  timestamp: string;
+}
 
 interface EmotionDonutChartProps {
-  data: { emotions: { emotion: string; intensity: number }[] };
+  data: EmotionData[];
 }
 
 export default function EmotionDonutChart({ data }: EmotionDonutChartProps) {
-  if (!data || !data.emotions) {
-    // If data is undefined or empty, render a placeholder
+  const chartRef = useRef<ChartJS | null>(null); // Ref for Chart.js instance
+
+  useEffect(() => {
+    // Cleanup chart instance when component unmounts
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy(); // Destroy the chart instance
+      }
+    };
+  }, []);
+
+  if (!data || data.length === 0) {
     return <p>No emotional data available to display.</p>;
   }
 
   // Process the data to count emotion frequencies
   const emotionCounts: Record<string, number> = {};
-  data.emotions.forEach(e => {
+  data.forEach(e => {
     emotionCounts[e.emotion] = (emotionCounts[e.emotion] || 0) + e.intensity;
   });
 
@@ -28,5 +45,9 @@ export default function EmotionDonutChart({ data }: EmotionDonutChartProps) {
     ],
   };
 
-  return <Pie data={chartData} />;
+  return (
+    <div>
+      <Pie data={chartData} ref={chartRef} /> 
+    </div>
+  );
 }
