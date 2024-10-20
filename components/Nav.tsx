@@ -29,42 +29,37 @@ export const Nav = () => {
   return (
     <div
       className={
-        "px-4 py-2 flex items-center h-14 z-50 bg-card border-b border-border"
+        "relative px-6 py-3 flex items-center h-16 z-50 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:bg-gradient-to-r dark:from-gray-800 dark:via-gray-700 dark:to-black border-b border-border shadow-2xl rounded-full backdrop-blur-md glassmorphism"
       }
     >
-      <div>
-        <HumeLogo className={"h-5 w-auto"} />
+      {/* Particles in the background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="particle-bg" />
       </div>
-      <div className={"ml-auto flex items-center gap-1"}>
-        <Button
-          onClick={() => {
-            window.open(
-              pkg.homepage,
-              "_blank",
-              "noopener noreferrer"
-            );
-          }}
-          variant={"ghost"}
-          className={"ml-auto flex items-center gap-1.5"}
-        >
-          <span>
-            <Github className={"size-4"} />
-          </span>
-          <span>Star on GitHub</span>
-        </Button>
+
+      <div className="z-10 flex items-center gap-4">
+        <HumeLogo className={"h-6 w-auto text-white dark:text-indigo-200 transition-all duration-300"} />
+      </div>
+
+      <div className={"ml-auto flex items-center gap-5 z-10"}>
+        {/* Dark Mode Toggle with Animated Glow */}
         <Button
           onClick={toggleDark}
           variant={"ghost"}
-          className={"ml-auto flex items-center gap-1.5"}
+          className={
+            "ml-auto flex items-center gap-1.5 transition-all duration-300 hover:scale-110 neon-glow"
+          }
         >
           <span>
             {isDarkMode ? (
-              <Sun className={"size-4"} />
+              <Sun className={"size-5 text-yellow-400 glow-yellow transition-transform hover:scale-110"} />
             ) : (
-              <Moon className={"size-4"} />
+              <Moon className={"size-5 text-indigo-500 glow-indigo transition-transform hover:scale-110"} />
             )}
           </span>
-          <span>{isDarkMode ? "Light" : "Dark"} Mode</span>
+          <span className="font-semibold text-white dark:text-indigo-200 transition-all duration-300">
+            {isDarkMode ? "Light" : "Dark"} Mode
+          </span>
         </Button>
       </div>
     </div>

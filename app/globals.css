@@ -149,4 +149,28 @@
   .wave-effect.tertiary {
     animation-delay: 0.4s; /* Create a third ripple */
   }
+
+    /* Particle animation for background */
+    .particle-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent),
+        radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent),
+        radial-gradient(circle, rgba(255, 255, 255, 0.02), transparent);
+      background-size: 300% 300%;
+      animation: moveParticles 20s infinite ease-in-out;
+    }
+    
+    @keyframes moveParticles {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 50% 50%;
+      }
+      100% {
+        background-position: 0% 0%;
+      }
+    }
 }
