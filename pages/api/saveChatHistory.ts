@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const db = await connectToDatabase();
+    console.log("MongoDB URI:", process.env.MONGODB_URI);
     console.log("Connected to DB");  // Log connection success
 
     const result = await db.collection('chatHistories').insertOne({
