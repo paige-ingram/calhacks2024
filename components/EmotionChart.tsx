@@ -1,64 +1,110 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, ChartData } from 'chart.js';
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Filler,
+  TimeScale,
+} from 'chart.js';
+import 'chartjs-adapter-date-fns'; // Import the date-fns adapter to handle time scales
 
-interface EmotionData {
-  emotion: string;
-  intensity: number;
-  timestamp: string;
-}
+// Register required Chart.js elements
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Filler,
+  TimeScale // For time-based scales (x-axis)
+);
 
 interface EmotionChartProps {
-  data: EmotionData[]; // Accepts an array of EmotionData
+  data: { emotion: string; intensity: number; timestamp: string }[];
 }
 
-export default function EmotionChart({ data }: EmotionChartProps) {
-  const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
-  const chartRef = useRef<ChartJS<'line'> | null>(null); // Use correct typing for Chart.js instance
+const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
+  // Transform data into Chart.js format
+  const chartData = {
+    labels: data.map((item) => new Date(item.timestamp)), // X-axis (timestamps)
+    datasets: [
+      {
+        label: 'Emotion Intensity',
+        data: data.map((item) => ({ x: new Date(item.timestamp), y: item.intensity })), // Ensure each entry has x (time) and y (intensity)
+        borderColor: '#4caf50', // Line color
+        backgroundColor: 'rgba(76, 175, 80, 0.2)', // Fill color under the line
+        pointRadius: 5, // Radius of data points
+        pointBackgroundColor: '#388e3c',
+        tension: 0.4, // Curve the line
+        fill: true, // Fill the area under the line
+      },
+    ],
+  };
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      // Extract intensities and timestamps from the data array
-      const intensities = data.map((e) => e.intensity);
-      const timestamps = data.map((e) =>
-        new Date(e.timestamp).toLocaleTimeString()
-      );
-
-      setChartData({
-        labels: timestamps,
-        datasets: [
-          {
-            label: 'Emotional Intensity Over Time',
-            data: intensities,
-            fill: false,
-            borderColor: 'rgba(75,192,192,1)',
-            tension: 0.1,
+  // Chart options
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false, // Ensure chart is responsive
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            let label = context.label || '';
+            if (label) {
+              label += ': ';
+            }
+            // Ensure context.parsed.y is used as the number value
+            if (context.parsed.y !== null) {
+              label += context.parsed.y.toFixed(2); // Round the values to 2 decimal places
+            }
+            return label;
           },
-        ],
-      });
-    }
+        },
+      },
+    },
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'minute', // Granularity of the X-axis labels
+          tooltipFormat: 'MMM d, h:mm a', // Tooltip format
+          displayFormats: {
+            minute: 'h:mm a', // Display format for minute intervals
+            hour: 'h:mm a', // Display format for hour intervals
+          },
+        },
+        title: {
+          display: true,
+          text: 'Time',
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Intensity',
+        },
+        ticks: {
+          stepSize: 0.1, // Control the step size for better granularity
+        },
+      },
+    },
+  };
 
-    // Cleanup chart instance when component unmounts or updates
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy(); // Destroy the Chart.js instance
-        chartRef.current = null;
-      }
-    };
-  }, [data]);
-
-  if (!data || data.length === 0) {
-    return <p>No data available for the chart.</p>;
-  }
-
-  return chartData ? (
-    <Line
-      data={chartData}
-      ref={(instance) => {
-        chartRef.current = instance ?? null; // Store the Chart.js instance safely
-      }}
-    />
-  ) : (
-    <p>Loading chart...</p>
+  return (
+    <div style={{ height: '100%', width: '100%' }}>
+      <Line data={chartData} options={options} />
+    </div>
   );
-}
+};
+
+export default EmotionChart;

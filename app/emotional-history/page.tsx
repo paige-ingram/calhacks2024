@@ -19,7 +19,7 @@ const emotionColors: Record<string, string> = {
 const fetchEmotionData = async () => {
   try {
     const baseurl = '/chat_history/';
-    const fileName = '2024-10-19T20:51:44.785Z.json';
+    const fileName = '2024-10-19T23:11:31.890Z.json';
     console.log("Fetching data from:", `${baseurl}${fileName}`);
     const response = await fetch(`${baseurl}${fileName}`);
     const data = await response.json();
@@ -136,14 +136,16 @@ export default function EmotionalHistory() {
 
   const conversationStart = emotionAvgs.conversationStart || new Date().toISOString();
   console.log("These are the emotion avgs: " + emotionAvgs);
+  
   const emotionDataArray = Object.keys(emotionAvgs)
-  .filter(emotion => emotion !== 'conversationStart')
-  .map(emotion => ({
+  .filter(emotion => emotion !== 'conversationStart') // Exclude 'conversationStart'
+  .map((emotion, index) => ({
     emotion: emotion,
     intensity: emotionAvgs[emotion],
-    timestamp: conversationStart
+    timestamp: new Date(new Date(emotionAvgs.conversationStart).getTime() + index * 60000).toISOString(), // Increment time by 1 minute for each entry
   }));
   console.log("here is emotion data array: " + JSON.stringify(emotionDataArray));
+  
 
   // const weeklyAverage = calculateWeeklyAverage(emotionAvgs);
   const outliers = emotionAvgs;
@@ -205,19 +207,20 @@ export default function EmotionalHistory() {
                 <EmotionBarChart data={emotionDataArray} />
               </div>
             </div>
-            {/* <div className="bg-white p-4 shadow rounded-lg h-auto">
+            <div className="bg-white p-4 shadow rounded-lg h-auto">
               <h2 className="text-xl font-semibold mb-4 text-center">Emotions Distribution</h2>
               <div className="h-80">
                 <EmotionDonutChart data={emotionDataArray} />
               </div>
-            </div> */}
+            </div>
           </div>
-          {/* <div className="bg-white p-6 shadow rounded-lg">
+          <div className="bg-white p-6 shadow rounded-lg">
+            
             <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time</h2>
             <div className="h-96">
               <EmotionChart data={emotionDataArray} />
             </div>
-          </div> */}
+          </div>
         </>
       )}
     </div>
