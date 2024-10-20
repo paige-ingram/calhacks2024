@@ -2,7 +2,8 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Sun } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Camera from "./Camera"; // Import Camera component for detecting a person
 
 // Define the type for wave objects
 interface Wave {
@@ -16,6 +17,9 @@ export default function StartCall() {
   const [waves, setWaves] = useState<Wave[]>([]);
   const { status, connect } = useVoice();
   const [buttonActive, setButtonActive] = useState(false);
+  const [showCamera, setShowCamera] = useState(false); // Show camera after clicking 'Launch'
+  const [personDetected, setPersonDetected] = useState(false); // Track person detection
+  const haloButtonRef = useRef<HTMLButtonElement>(null); // Ref to auto-click 'Launch Halo' button
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,20 +30,24 @@ export default function StartCall() {
     return () => clearTimeout(timer);
   }, []);
 
-  const createWave = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const createWave = () => {
     const waveId = Date.now();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const maxDimension = Math.max(viewportWidth, viewportHeight);
     const waveSize = maxDimension * 2; // Large enough to cover the entire screen
-
+  
+    // Calculate the center position
+    const centerX = viewportWidth / 2;
+    const centerY = viewportHeight / 2;
+  
     const waveStyle = {
-      left: `${e.clientX - waveSize / 2}px`,
-      top: `${e.clientY - waveSize / 2}px`,
+      left: `${centerX - waveSize / 2}px`,
+      top: `${centerY - waveSize / 2}px`,
       width: `${waveSize}px`,
       height: `${waveSize}px`,
     };
-
+  
     // Create multiple waves with different classes
     setWaves((prevWaves) => [
       ...prevWaves,
@@ -47,7 +55,7 @@ export default function StartCall() {
       { id: waveId + 1, style: waveStyle, type: "secondary" },
       { id: waveId + 2, style: waveStyle, type: "tertiary" },
     ]);
-
+  
     // Remove the waves after the animation ends
     setTimeout(() => {
       setWaves((prevWaves) =>
@@ -56,6 +64,25 @@ export default function StartCall() {
         )
       );
     }, 1200);
+  };
+  
+
+  // Simulate click on 'Launch Halo' after person detection
+  useEffect(() => {
+    if (personDetected && haloButtonRef.current) {
+      haloButtonRef.current.click(); // Automatically click the 'Launch Halo' button
+    }
+  }, [personDetected]);
+
+  // Function to show camera and detect a person
+  const handleLaunchClick = () => {
+    setShowCamera(true);
+  };
+
+  // Function to trigger when a person is detected by the camera
+  const handlePersonDetected = () => {
+    setPersonDetected(true); // Update state when person is detected
+    setShowCamera(false); // Hide the camera after detection
   };
 
   const fetchSummary = async () => {
@@ -103,8 +130,7 @@ export default function StartCall() {
             }}
           />
         </div>
-      ) : ( 
-
+      ) : (
         status.value !== "connected" ? (
           <motion.div
             className={"fixed inset-0 p-4 flex items-center justify-center bg-background"}
@@ -120,46 +146,64 @@ export default function StartCall() {
             {/* Northern Lights Background */}
             <div className="northern-lights"></div>
 
-          <AnimatePresence>
-            <motion.div
-              variants={{
-                initial: { scale: 0.5 },
-                enter: { scale: 1 },
-                exit: { scale: 0.5 },
-              }}
-            >
-              {/* Buttons positioned at the bottom center */}
+            <AnimatePresence>
               <motion.div
-                className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+                variants={{
+                  initial: { scale: 0.5 },
+                  enter: { scale: 1 },
+                  exit: { scale: 0.5 },
+                }}
               >
-                <Button
-                  className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                  onClick={(e) => {
-                    createWave(e);
-                    connect()
-                      .then(() => {})
-                      .catch(() => {})
-                      .finally(() => {});
-                  }}
-                >
-                  <span>
-                    <Sun
-                      className={"size-5 opacity-70 text-white"}
-                      strokeWidth={2}
-                      stroke={"currentColor"}
-                    />
-                  </span>
-                  <span className="font-semibold">Launch Halo</span>
-                </Button>
-                <Button
-                  className={"z-50 flex items-center gap-1.5"}
-                  onClick={fetchSummary}
-                >
-                  <span>Gemini Insights</span>
-                </Button>
+                {/* Camera for detecting a person */}
+                {showCamera && <Camera onPersonDetected={handlePersonDetected} />}
+
+                {/* Buttons positioned at the bottom center */}
+                <motion.div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2">
+                  
+                  {/* Launch button */}
+                  {!showCamera && (
+                    <Button
+                      className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                      onClick={handleLaunchClick}
+                    >
+                      <span>Launch</span>
+                    </Button>
+                  )}
+
+                  {/* Launch Halo button */}
+                  {personDetected && (
+                    <Button
+                      className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
+                      ref={haloButtonRef} // Reference to auto-click
+                      onClick={(e) => {
+                        createWave(e);
+                        connect()
+                          .then(() => {})
+                          .catch(() => {})
+                          .finally(() => {});
+                      }}
+                    >
+                      <span>
+                        <Sun
+                          className={"size-5 opacity-70 text-white"}
+                          strokeWidth={2}
+                          stroke={"currentColor"}
+                        />
+                      </span>
+                      <span className="font-semibold">Launch Halo</span>
+                    </Button>
+                  )}
+
+                  {/* Fetch summary button */}
+                  <Button
+                    className={"z-50 flex items-center gap-1.5"}
+                    onClick={fetchSummary}
+                  >
+                    <span>Gemini Insights</span>
+                  </Button>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </AnimatePresence>
+            </AnimatePresence>
 
             {/* Render the waves, which will cover the whole page and have multiple ripples */}
             {waves.map((wave) => (
