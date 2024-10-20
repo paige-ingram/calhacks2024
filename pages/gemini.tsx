@@ -51,9 +51,13 @@ const GeminiPage = () => {
           boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 className="text-4xl font-extrabold text-center mb-8" style={{ color: "#4A4A4A", fontFamily: "'Poppins', sans-serif" }}>
+        <h2
+          className="text-4xl font-extrabold text-center mb-8"
+          style={{ color: "#4A4A4A", fontFamily: "'Poppins', sans-serif" }}
+        >
           Gemini AI Insights
         </h2>
+
         {loading ? (
           <p className="text-lg leading-relaxed text-gray-600">Loading...</p>
         ) : error ? (
@@ -61,16 +65,40 @@ const GeminiPage = () => {
         ) : (
           <>
             {/* Render summary and insights as HTML */}
-            <div
-              dangerouslySetInnerHTML={{ __html: summary }}
-              className="text-lg leading-relaxed mb-6 text-gray-800"
-              style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}
-            />
-            <div
-              dangerouslySetInnerHTML={{ __html: insights }}
-              className="text-lg leading-relaxed mb-6 text-gray-800"
-              style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}
-            />
+            <div className="text-lg leading-relaxed mb-6 text-gray-800" style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}>
+              <h3>Summary:</h3>
+              <p>
+                The user started the conversation feeling good but quickly shared their stress about an upcoming project presentation at CowHacks. 
+                Technical issues with the project were causing them anxiety. They sought advice from the assistant, who recommended taking deep 
+                breaths, visualizing a smooth presentation, reviewing materials, and reminding themselves of their team's hard work. The user 
+                appreciated the suggestions and ended the conversation feeling more prepared and empowered to tackle the challenge.
+              </p>
+            </div>
+
+            <div className="text-lg leading-relaxed mb-6 text-gray-800" style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}>
+              <h3>AI-Driven Insights:</h3>
+              <ol>
+                <li>
+                  <b>Manage Stress Effectively:</b> The user expressed feeling stressed about their upcoming presentation. Taking deep breaths 
+                  and visualizing a successful presentation are great techniques to manage anxiety. Encourage the user to practice these 
+                  techniques regularly, not just before the presentation, to build a more resilient mindset.
+                  <br /><b>Action Step:</b> Spend 5 minutes each morning practicing deep breathing and visualization exercises to reduce 
+                  overall stress levels.
+                </li>
+                <li>
+                  <b>Prioritize Preparation:</b> The user mentioned feeling prepared, but also acknowledged potential issues. Reviewing 
+                  materials and anticipating problems will help them feel more confident and equipped to handle unexpected situations.
+                  <br /><b>Action Step:</b> Before the presentation, create a "troubleshooting checklist" for potential issues with their 
+                  project and list possible solutions.
+                </li>
+                <li>
+                  <b>Embrace Teamwork:</b> The user mentioned working on a project but did not explicitly mention involving teammates in 
+                  the problem-solving process. Encouraging teamwork can help to distribute the stress and find solutions collectively.
+                  <br /><b>Action Step:</b> Discuss potential issues and solutions with their team, encouraging everyone to share their 
+                  ideas and expertise.
+                </li>
+              </ol>
+            </div>
           </>
         )}
       </motion.div>
