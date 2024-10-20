@@ -1,26 +1,27 @@
-import React from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LineElement,
   PointElement,
   LinearScale,
-  TimeScale, // Import TimeScale for time-based data
+  CategoryScale,
   Tooltip,
   Legend,
   Filler,
+  TimeScale,   // Import TimeScale for time-based data
 } from 'chart.js';
-import 'chartjs-adapter-date-fns'; // Import the date-fns adapter to handle time scales
+import 'chartjs-adapter-date-fns';
 
-// Register required Chart.js elements
+// Register required Chart.js components
 ChartJS.register(
   LineElement,
   PointElement,
   LinearScale,
-  TimeScale, // Register the TimeScale for x-axis
+  CategoryScale,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  TimeScale // Correctly register TimeScale for date formatting
 );
 
 interface EmotionChartProps {
@@ -28,16 +29,13 @@ interface EmotionChartProps {
 }
 
 const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
-  // Transform data into Chart.js format
+  // Define the chart data
   const chartData = {
     labels: data.map((item) => new Date(item.timestamp)), // X-axis (timestamps)
     datasets: [
       {
         label: 'Emotion Intensity',
-        data: data.map((item) => ({
-          x: new Date(item.timestamp),
-          y: item.intensity,
-        })), // Ensure each entry has x (time) and y (intensity)
+        data: data.map((item) => ({ x: new Date(item.timestamp), y: item.intensity })), // X (time) and Y (intensity)
         borderColor: '#4caf50', // Line color
         backgroundColor: 'rgba(76, 175, 80, 0.2)', // Fill color under the line
         pointRadius: 5, // Radius of data points
@@ -48,13 +46,13 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     ],
   };
 
-  // Chart options
+  // Define the chart options
   const options = {
     responsive: true,
     maintainAspectRatio: false, // Ensure chart is responsive
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'top',
       },
       tooltip: {
         callbacks: {
@@ -63,9 +61,8 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
             if (label) {
               label += ': ';
             }
-            // Ensure context.parsed.y is used as the number value
             if (context.parsed.y !== null) {
-              label += context.parsed.y.toFixed(2); // Round the values to 2 decimal places
+              label += context.parsed.y.toFixed(2); // Round to 2 decimal places
             }
             return label;
           },
@@ -74,13 +71,13 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     },
     scales: {
       x: {
-        type: 'time', // Corrected type for time-based data
+        type: 'time', // Correct scale type
         time: {
-          unit: 'minute', // Granularity of the X-axis labels
+          unit: 'minute', // Granularity of X-axis labels
           tooltipFormat: 'MMM d, h:mm a', // Tooltip format
           displayFormats: {
-            minute: 'h:mm a', // Display format for minute intervals
-            hour: 'h:mm a', // Display format for hour intervals
+            minute: 'h:mm a',
+            hour: 'h:mm a',
           },
         },
         title: {
@@ -95,7 +92,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
           text: 'Intensity',
         },
         ticks: {
-          stepSize: 0.1, // Control the step size for better granularity
+          stepSize: 0.1,
         },
       },
     },
