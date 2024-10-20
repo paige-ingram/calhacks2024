@@ -4,56 +4,173 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
+    --background: 220 15% 96%; /* Use the --primary color for background */
+    --foreground: 230 25% 90%; /* Lighter text for contrast */
+    --card: 220 15% 96%;
+    --card-foreground: 230 25% 10%;
+    --popover: 220 15% 96%;
+    --popover-foreground: 230 25% 10%;
+    --primary: 240 100% 67%; /* Vibrant blue */
     --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --secondary: 240 40% 20%; /* Soft dark blue */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 14% 90%;
+    --muted-foreground: 230 25% 50%;
+    --accent: 260 100% 75%; /* Soft purple */
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --border: 220 10% 80%; /* Muted blue-grey */
+    --input: 220 10% 80%;
+    --ring: 240 80% 67%; /* Glowing blue */
+    --radius: 0.75rem;
+
+    --northern-lights-1: 270 70% 70%;  /* Purple */
+    --northern-lights-2: 180 100% 50%; /* Cyan */
+    --northern-lights-3: 300 80% 70%;  /* Magenta */
   }
 
+  /* Dark mode styles */
+.dark {
+  --background: 230 15% 12%; /* Dark grey background */
+  --foreground: 0 0% 100%; /* White text */
+  --card: 230 25% 15%;
+  --card-foreground: 0 0% 98%; /* White text on cards */
+  --primary: 220 50% 50%; /* Soft dark blue */
+  --primary-foreground: 0 0% 98%;
+  --secondary: 230 15% 25%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 230 15% 25%;
+  --muted-foreground: 240 5% 70%;
+  --accent: 260 65% 60%; /* Soft purple */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 230 20% 35%;
+  --input: 230 20% 35%;
+  --ring: 240 80% 67%; /* Glowing blue */
+}
+
+
+  /* Northern Lights Animation */
+  @keyframes northernLightsFlicker {
+    0%, 100% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes wave {
+    0% {
+      transform: scale(0.2);
+      opacity: 0.9;
+      filter: blur(0);
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.6;
+      filter: blur(8px); /* Adding blur effect */
+    }
+    100% {
+      transform: scale(3); /* Ensuring full-page coverage */
+      opacity: 0;
+      filter: blur(12px);
+    }
+  }
+
+  /* Dark mode styles */
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --background: 230 15% 12%; /* Dark grey background */
+    --foreground: 0 0% 100%; /* White text */
+    --card: 230 25% 15%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
+    --primary: 220 50% 50%; /* Soft dark blue */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 230 15% 25%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --muted: 230 15% 25%;
+    --muted-foreground: 240 5% 70%;
+    --accent: 260 65% 60%; /* Soft purple */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 230 20% 35%;
+    --input: 230 20% 35%;
+    --ring: 240 80% 67%; /* Glowing blue */
   }
-}
 
-@layer base {
-  * {
-    @apply border-border font-sans;
+  .northern-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 50% 25%,
+        hsl(var(--northern-lights-1)) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 80% 75%,
+        hsl(var(--northern-lights-2)) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 20% 50%,
+        hsl(var(--northern-lights-3)) 0%,
+        transparent 60%
+      );
+    animation: northernLightsFlicker 10s infinite ease-in-out;
+    z-index: 0;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  .glow-button {
+    @apply relative transition-all duration-500 ease-in-out shadow-lg hover:scale-105 hover:shadow-[0_0_20px_rgba(0,132,255,0.7)] hover:bg-gradient-to-r from-primary to-accent text-white;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    z-index: 10; /* Ensuring it's above the background */
   }
+
+  .wave-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 132, 255, 0.7), rgba(132, 0, 255, 0.5)); /* Cool gradient */
+    animation: wave 1.2s ease-out;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .wave-effect.secondary {
+    animation-delay: 0.2s; /* Create a second ripple */
+  }
+
+  .wave-effect.tertiary {
+    animation-delay: 0.4s; /* Create a third ripple */
+  }
+
+    /* Particle animation for background */
+    .particle-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent),
+        radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent),
+        radial-gradient(circle, rgba(255, 255, 255, 0.02), transparent);
+      background-size: 300% 300%;
+      animation: moveParticles 20s infinite ease-in-out;
+    }
+    
+    @keyframes moveParticles {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 50% 50%;
+      }
+      100% {
+        background-position: 0% 0%;
+      }
+    }
 }

@@ -22,7 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const chats = await client.empathicVoice.chats.listChats({
       pageNumber: 12,
       pageSize: 10,
-      descendingOrder: true,
+      // descendingOrder: true
+      ascendingOrder: false
     });
 
     // Define the path for saving the chat history file
