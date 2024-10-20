@@ -224,19 +224,18 @@ export default function StartCall() {
                       </Link>
 
                       {/* Gemini Insights button */}
-                      <Button
-                        className={
-                          "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out text-xl"
-                        }
-                        style={{ width: "300px" }}
-                        onClick={(e) => {
-                          createWave(e);
-                          fetchSummary();
-                        }}
-                      >
-                        <Eye className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
-                        <span className="font-semibold">Gemini Insights</span>
-                      </Button>
+                      <Link href="/gemini">
+  <Button
+    className={
+      "glow-button z-50 flex items-center justify-center gap-1.5 p-8 rounded-full hover:scale-110 transition-all duration-300 ease-in-out text-xl"
+    }
+    style={{ width: "300px" }}
+    onClick={(e) => createWave(e)}
+  >
+    <Eye className={"size-5 opacity-70 text-white"} strokeWidth={2} stroke={"currentColor"} />
+    <span className="font-semibold">Gemini Insights</span>
+  </Button>
+</Link>
                     </div>
                   )}
                 </motion.div>
