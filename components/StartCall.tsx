@@ -120,19 +120,21 @@ export default function StartCall() {
             {/* Northern Lights Background */}
             <div className="northern-lights"></div>
 
-            <AnimatePresence>
+          <AnimatePresence>
+            <motion.div
+              variants={{
+                initial: { scale: 0.5 },
+                enter: { scale: 1 },
+                exit: { scale: 0.5 },
+              }}
+            >
+              {/* Buttons positioned at the bottom center */}
               <motion.div
-                variants={{
-                  initial: { scale: 0.5 },
-                  enter: { scale: 1 },
-                  exit: { scale: 0.5 },
-                }}
+                className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2"
               >
                 <Button
                   className={"glow-button z-50 flex items-center gap-2 px-6 py-3 relative"}
-                  disabled={!buttonActive}
                   onClick={(e) => {
-                    if (!buttonActive) return;
                     createWave(e);
                     connect()
                       .then(() => {})
@@ -149,8 +151,15 @@ export default function StartCall() {
                   </span>
                   <span className="font-semibold">Launch Halo</span>
                 </Button>
+                <Button
+                  className={"z-50 flex items-center gap-1.5"}
+                  onClick={fetchSummary}
+                >
+                  <span>Gemini Insights</span>
+                </Button>
               </motion.div>
-            </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
 
             {/* Render the waves, which will cover the whole page and have multiple ripples */}
             {waves.map((wave) => (

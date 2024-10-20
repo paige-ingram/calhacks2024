@@ -34,6 +34,7 @@
     "react-webcam": "^7.2.0",
     "remeda": "^2.0.9",
     "server-only": "^0.0.1",
+    "spotify-web-api-node": "^5.0.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-pattern": "^5.1.2"
@@ -42,6 +43,7 @@
     "@types/node": "^20.16.12",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/spotify-web-api-node": "^5.0.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
