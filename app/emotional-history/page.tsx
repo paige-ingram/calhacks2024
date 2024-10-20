@@ -88,7 +88,7 @@ export default function EmotionalHistory() {
   const [recommendedMusic, setRecommendedMusic] = useState<any[]>([]); // State for recommended music
 
   useEffect(() => {
-    fetchEmotionData().then(data => {
+    fetchEmotionData().then(async data => {
       if (data) {
         const calculatedAverages = calculateEmotionAverages(data);
         console.log("Setting emotion avgs:", JSON.stringify(calculatedAverages));
@@ -101,8 +101,8 @@ export default function EmotionalHistory() {
         const music = await fetchRecommendedMusic(firstEmotion);
         setRecommendedMusic(music);
       }
-    };
-    getData();
+    });
+    // getData();
   }, [loggedIn]); // Refetch recommended music once logged in
 
   // Function to calculate the weekly average intensity
