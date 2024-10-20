@@ -73,7 +73,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
     },
     scales: {
       x: {
-        type: 'time',
+        type: 'timeseries',
         time: {
           unit: 'minute', // Granularity of the X-axis labels
           tooltipFormat: 'MMM d, h:mm a', // Tooltip format
