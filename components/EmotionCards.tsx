@@ -25,7 +25,7 @@ interface EmotionData {
     const getEmotionEmoji = (emotion: string) => emotionEmojis[emotion] || "😶";
   
     return (
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full"> {/* Enforce a responsive grid with 3 columns */}
         {data.map((emotionData, index) => (
           <div
             key={index}
@@ -40,5 +40,4 @@ interface EmotionData {
       </div>
     );
   }
-  
   

@@ -254,15 +254,9 @@ export default function EmotionalHistory() {
       </div>
 
       {/* Emotion Overview Cards */}
-      <div className="mb-8">
+      <div className="mb-8 w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Emotion Overview Cards */}
-        <div className="w-full mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-          <EmotionCards data={emotionDataArray} emotionEmojis={emotionEmojis} emotionColors={emotionColors} />
-        </div>
-        </div>
+        <EmotionCards data={emotionDataArray} emotionEmojis={emotionEmojis} emotionColors={emotionColors} />
       </div>
 
       {/* Line Chart for Emotion Trends */}
