@@ -57,6 +57,7 @@ const emotionEmojis: { [key: string]: string } = {
   triumph: "🎉"
 };
 
+const numEmotions = Object.keys(emotionEmojis).length;
 
 const emotionColors = {
   admiration: "#FFAA00",
@@ -256,7 +257,7 @@ export default function EmotionalHistory() {
       {/* Emotion Overview Cards */}
       <div className="mb-8 w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-          <EmotionCards data={emotionDataArray}
+          <EmotionCards data={emotionDataArray.slice(0, numEmotions)}
             emotionEmojis={emotionEmojis} 
             emotionColors={emotionColors} />
       </div>
