@@ -57,6 +57,7 @@ const emotionEmojis: { [key: string]: string } = {
   triumph: "🎉"
 };
 
+const numEmotions = Object.keys(emotionEmojis).length;
 
 const emotionColors = {
   admiration: "#FFAA00",
@@ -215,7 +216,7 @@ export default function EmotionalHistory() {
     fetchData();
   }, []);
 
-
+  // const mostRecentEmotionData = emotionDataArray.length > 0 ? [emotionDataArray[emotionDataArray.length - 1]] : [];
 
   return (
     <div className="w-full p-4">
@@ -254,22 +255,18 @@ export default function EmotionalHistory() {
       </div>
 
       {/* Emotion Overview Cards */}
-      <div className="mb-8">
+      <div className="mb-8 w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Emotion Overview Cards */}
-        <div className="w-full mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-          <EmotionCards data={emotionDataArray} emotionEmojis={emotionEmojis} emotionColors={emotionColors} />
-        </div>
-        </div>
+          <EmotionCards data={emotionDataArray.slice(0, numEmotions)}
+            emotionEmojis={emotionEmojis} 
+            emotionColors={emotionColors} />
       </div>
 
       {/* Line Chart for Emotion Trends */}
       <div className="bg-white p-6 shadow rounded-lg w-full">
         <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time (Line Chart)</h2>
         <div className="h-96">
-          <EmotionLineChart data={emotionDataArray} />
+          <EmotionLineChart data={emotionDataArray.slice().reverse()} allEmotions={Object.keys(emotionEmojis)} />
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ interface EmotionData {
     const getEmotionEmoji = (emotion: string) => emotionEmojis[emotion] || "😶";
   
     return (
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-16 gap-4 w-full"> {/* Enforce a responsive grid with 3 columns */}
         {data.map((emotionData, index) => (
           <div
             key={index}
@@ -33,12 +33,11 @@ interface EmotionData {
             style={{ backgroundColor: "#ffffff" }}
           >
             <div className="text-4xl mb-2">{getEmotionEmoji(emotionData.emotion)}</div>
-            <h3 className="text-xl font-semibold">{camelCaseToWords(emotionData.emotion)}</h3>
+            <h3 className="text-m font-semibold">{camelCaseToWords(emotionData.emotion)}</h3>
             <p className="text-lg">{Math.round(emotionData.intensity * 100)}%</p>
           </div>
         ))}
       </div>
     );
   }
-  
   
