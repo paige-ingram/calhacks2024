@@ -3,18 +3,110 @@
 import { useState, useEffect } from "react";
 import EmotionLineChart from '@/components/EmotionLineChart';
 import SpotifyLoginButton from '@/components/ui/SpotifyLoginButton';
+import EmotionCards from '@/components/EmotionCards';
 
-// Color and emoticon mapping for emotions
-const emotionColors: Record<string, string> = {
-  happy: "yellow",
-  sad: "blue",
-  angry: "red",
+
+const emotionEmojis: { [key: string]: string } = {
+  admiration: "👏",
+  adoration: "😍",
+  aestheticAppreciation: "🎨",
+  amusement: "😂",
+  anger: "😡",
+  anxiety: "😰",
+  awe: "😲",
+  awkwardness: "😅",
+  boredom: "😐",
+  calmness: "😌",
+  concentration: "🧐",
+  confusion: "😕",
+  contemplation: "🤔",
+  contempt: "😒",
+  contentment: "😊",
+  craving: "🍩",
+  desire: "💘",
+  determination: "💪",
+  disappointment: "😞",
+  disgust: "🤢",
+  distress: "😖",
+  doubt: "🤨",
+  ecstasy: "🤩",
+  embarrassment: "😳",
+  empathicPain: "😢",
+  entrancement: "💫",
+  envy: "😒",
+  excitement: "🤗",
+  fear: "😱",
+  guilt: "😬",
+  horror: "😨",
+  interest: "👀",
+  joy: "😁",
+  love: "❤️",
+  nostalgia: "🌅",
+  pain: "💔",
+  pride: "🏆",
+  realization: "💡",
+  relief: "😮‍💨",
+  romance: "💏",
+  sadness: "😢",
+  satisfaction: "😌",
+  shame: "😳",
+  surpriseNegative: "😦",
+  surprisePositive: "😲",
+  sympathy: "💞",
+  tiredness: "😴",
+  triumph: "🎉"
 };
 
-const emotionEmojis: Record<string, string> = {
-  happy: "😊",
-  sad: "😢",
-  angry: "😡",
+
+const emotionColors = {
+  admiration: "#FFAA00",
+  adoration: "#FF69B4",
+  aestheticAppreciation: "#8B4513",
+  amusement: "#FFD700",
+  anger: "#FF0000",
+  anxiety: "#A52A2A",
+  awe: "#6A5ACD",
+  awkwardness: "#D2691E",
+  boredom: "#808080",
+  calmness: "#00CED1",
+  concentration: "#4682B4",
+  confusion: "#A9A9A9",
+  contemplation: "#708090",
+  contempt: "#8B0000",
+  contentment: "#7FFF00",
+  craving: "#FF6347",
+  desire: "#DC143C",
+  determination: "#1E90FF",
+  disappointment: "#696969",
+  disgust: "#556B2F",
+  distress: "#8B0000",
+  doubt: "#D3D3D3",
+  ecstasy: "#FF4500",
+  embarrassment: "#FFB6C1",
+  empathicPain: "#A52A2A",
+  entrancement: "#6A5ACD",
+  envy: "#228B22",
+  excitement: "#FF8C00",
+  fear: "#2F4F4F",
+  guilt: "#808080",
+  horror: "#000000",
+  interest: "#1E90FF",
+  joy: "#FFD700",
+  love: "#FF1493",
+  nostalgia: "#B0C4DE",
+  pain: "#A52A2A",
+  pride: "#FF6347",
+  realization: "#4682B4",
+  relief: "#98FB98",
+  romance: "#FF69B4",
+  sadness: "#4169E1",
+  satisfaction: "#32CD32",
+  shame: "#A9A9A9",
+  surpriseNegative: "#DAA520",
+  surprisePositive: "#FFD700",
+  sympathy: "#8B4513",
+  tiredness: "#708090",
+  triumph: "#FF4500"
 };
 
 // Fetch data using fetch API
@@ -22,7 +114,7 @@ const fetchEmotionData = async () => {
   try {
     const response = await fetch('/api/getEmotionData'); // Calls the new API route
     const data = await response.json(); // Parse the JSON response
-    console.log("Fetched data from MongoDB:", data);
+    console.log("Fetched data from MongoDB:", JSON.stringify(data));
     return data;
   } catch (error) {
     console.error('Failed to fetch emotion data:', error);
@@ -31,118 +123,122 @@ const fetchEmotionData = async () => {
 };
 
 interface EmotionScores {
-  [key: string]: number;
+  [emotion: string]: number;
 }
 
-const calculateEmotionAverages = (data: any[], days: number) => {
-  const emotionSums: EmotionScores = {};
-  const emotionCounts: EmotionScores = {};
-  const now = new Date();
-  
-  if (!Array.isArray(data)) {
-    console.error('Data is not an array:', data);
-    return {};
-  }
+interface ProsodyModel {
+  scores: EmotionScores;
+}
 
-  data.forEach(entry => {
-    const entryDate = new Date(entry.receivedAt);
-    const diffDays = Math.ceil((now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24));
+interface ChatMessage {
+  type: string;
+  message: {
+    role: string;
+    content: string;
+  };
+  models?: {
+    prosody?: ProsodyModel;
+  };
+}
 
-    if (diffDays <= days) {
-      if (entry.chatHistory) {
-        entry.chatHistory.forEach((item: any) => {
-          if (item.type === 'user_message' && item.models && item.models.prosody && item.models.prosody.scores) {
-            const scores = item.models.prosody.scores;
-            Object.keys(scores).forEach(emotion => {
-              if (!emotionSums.hasOwnProperty(emotion)) {
-                emotionSums[emotion] = 0;
-                emotionCounts[emotion] = 0;
-              }
-              emotionSums[emotion] += scores[emotion];
-              emotionCounts[emotion]++;
-            });
+interface ChatEntry {
+  _id: string;
+  timestamp: string;
+  chatHistory: ChatMessage[];
+}
+
+interface EmotionData {
+  emotion: string;
+  intensity: number;
+  timestamp: string;
+}
+
+
+const processEmotionData = (data: ChatEntry[]): EmotionData[] => {
+  const emotionDataArray: EmotionData[] = [];
+
+  data.forEach((entry) => {
+    const timestamp = entry.timestamp;
+    const emotionSums: { [emotion: string]: number } = {};
+    const emotionCounts: { [emotion: string]: number } = {};
+
+    entry.chatHistory.forEach((chat) => {
+      if (
+        chat &&
+        chat.message &&
+        chat.message.role === 'user' &&
+        chat.models &&
+        chat.models.prosody &&
+        chat.models.prosody.scores
+      ) {
+        const emotions = chat.models.prosody.scores;
+
+        for (const [emotion, score] of Object.entries(emotions)) {
+          if (!emotionSums[emotion]) {
+            emotionSums[emotion] = 0;
+            emotionCounts[emotion] = 0;
           }
-        });
-      }
-    }
-  });
-
-  const emotionAverages: EmotionScores = {};
-  Object.keys(emotionSums).forEach(emotion => {
-    if (emotionCounts[emotion] > 0) {
-      emotionAverages[emotion] = emotionSums[emotion] / emotionCounts[emotion];
-    }
-  });
-
-  return emotionAverages;
-};
-
-const getDominantEmotion = (emotionAverages: EmotionScores) => {
-  return Object.keys(emotionAverages).reduce((a, b) => (emotionAverages[a] > emotionAverages[b] ? a : b), "happy");
-};
-
-export default function EmotionalHistory() {
-  const [emotionAvgs, setEmotionAvgs] = useState<any>(null);
-  const [viewMode, setViewMode] = useState<'weekly' | 'monthly'>('weekly'); // State to track view mode
-  const [loggedIn, setLoggedIn] = useState(false); // State to track if user is logged in
-  const [recommendedMusic, setRecommendedMusic] = useState<any[]>([]); // State for recommended music
-
-  useEffect(() => {
-    fetchEmotionData().then(async data => {
-      if (Array.isArray(data)) {
-        const days = viewMode === 'weekly' ? 7 : 30;
-        const calculatedAverages = calculateEmotionAverages(data, days);
-        setEmotionAvgs(calculatedAverages);
-      } else {
-        console.error('Data fetched is not an array:', data);
+          emotionSums[emotion] += score;
+          emotionCounts[emotion] += 1;
+        }
       }
     });
-  }, [viewMode]); // Recalculate emotion data when viewMode changes
 
-  if (!emotionAvgs) {
-    return <p>Loading emotional data...</p>;
-  }
-
-  const now = new Date();
-  const daysToShow = viewMode === 'weekly' ? 7 : 30;
-  
-  const emotionDataArray = Array.from({ length: daysToShow }).map((_, index) => {
-    const timestamp = new Date(now.getTime() - index * 86400000).toISOString(); // Each day in the range
-    const emotionAverages = calculateEmotionAverages(emotionAvgs, daysToShow); // Calculate averages for the time frame
-    const dominantEmotion = getDominantEmotion(emotionAverages); // Get the dominant emotion for each day
-
-    return {
-      emotion: dominantEmotion,
-      intensity: emotionAverages[dominantEmotion] || 0.0, // Default intensity to 0.0 if undefined
-      emoji: emotionEmojis[dominantEmotion],
-      timestamp,
-    };
+    for (const [emotion, totalScore] of Object.entries(emotionSums)) {
+      const averageIntensity = totalScore / emotionCounts[emotion];
+      emotionDataArray.push({
+        emotion,
+        intensity: parseFloat(averageIntensity.toFixed(2)),
+        timestamp
+      });
+    }
   });
 
+  return emotionDataArray;
+};
+
+
+
+
+
+export default function EmotionalHistory() {
+  const [viewMode, setViewMode] = useState("weekly");
+  const [emotionDataArray, setEmotionDataArray] = useState<any[]>([]); 
+  const loggedIn = false;
+  const recommendedMusic: { name: string; artists: { name: string }[] }[] = [];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchEmotionData(); // Fetch the data
+      setEmotionDataArray(processEmotionData(data)); // Process and set it in state
+    };
+    fetchData();
+  }, []);
+
+
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full p-4">
       <h1 className="text-4xl font-bold mb-6 text-center">Your Emotional History</h1>
 
       {/* Spotify Login Button */}
       <div className="mb-4">
-        {!loggedIn ? (
-          <SpotifyLoginButton />
-        ) : (
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Music Recommendations Based on Your Mood</h2>
-            <ul>
-              {recommendedMusic.map((track, index) => (
-                <li key={index}>
-                  <p>{track.name} by {track.artists[0].name}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      {loggedIn && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Music Recommendations Based on Your Mood</h2>
+          <ul>
+            {recommendedMusic.map((track, index) => (
+              <li key={index}>
+                <p>{track.name} by {track.artists[0]?.name}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       </div>
 
       {/* View Mode Toggle */}
-      <div className="flex justify-center mb-6 space-x-4"> {/* Added space between buttons */}
+      <div className="flex justify-center mb-6 space-x-4">
         <button
           className={`px-4 py-2 rounded ${viewMode === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
           onClick={() => setViewMode('weekly')}
@@ -161,19 +257,16 @@ export default function EmotionalHistory() {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {emotionDataArray.map((entry, index) => (
-            <div key={index} className="p-4 bg-gray-100 rounded-lg shadow">
-              <p className="text-lg">{entry.timestamp.split("T")[0]}</p>
-              <span className="text-5xl" style={{ color: emotionColors[entry.emotion] }}>{entry.emoji}</span>
-              <p className="text-lg font-bold">{entry.emotion}</p>
-              <p>Intensity: {entry.intensity.toFixed(2)}</p> {/* Intensity is now defaulted to 0.00 */}
-            </div>
-          ))}
+        {/* Emotion Overview Cards */}
+        <div className="w-full mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
+          <EmotionCards data={emotionDataArray} emotionEmojis={emotionEmojis} emotionColors={emotionColors} />
+        </div>
         </div>
       </div>
 
       {/* Line Chart for Emotion Trends */}
-      <div className="bg-white p-6 shadow rounded-lg">
+      <div className="bg-white p-6 shadow rounded-lg w-full">
         <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time (Line Chart)</h2>
         <div className="h-96">
           <EmotionLineChart data={emotionDataArray} />
