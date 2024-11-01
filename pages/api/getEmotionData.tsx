@@ -11,18 +11,16 @@ const db = new MongoClient(uri, {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await db.connect();
-    const database = db.db('calhacksdb'); // Replace with your database name
-    const collection = database.collection('chatHistories'); // Replace with your collection name
+    const database = db.db('calhacksdb'); 
+    const collection = database.collection('chatHistories'); 
 
-    // Fetch all documents or filter as needed
     const allDocs = await collection.find({}).toArray();
-  // console.log("Here are all the docs: " + JSON.stringify(allDocs));
   
   // get most recent timestamp
     const mostRecentChat = await collection
         .find({})
         .sort({ timestamp: -1 })  // Sort by timestamp in descending order
-        .limit(1)                 // Limit the result to 1 document
+        .limit(10)                 // Limit the result to 10 document
         .toArray(); 
 
     if (mostRecentChat.length === 0) {

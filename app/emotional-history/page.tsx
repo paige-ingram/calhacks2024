@@ -215,7 +215,7 @@ export default function EmotionalHistory() {
     fetchData();
   }, []);
 
-
+  // const mostRecentEmotionData = emotionDataArray.length > 0 ? [emotionDataArray[emotionDataArray.length - 1]] : [];
 
   return (
     <div className="w-full p-4">
@@ -256,14 +256,16 @@ export default function EmotionalHistory() {
       {/* Emotion Overview Cards */}
       <div className="mb-8 w-full">
         <h2 className="text-2xl font-semibold mb-4 text-center">Emotion Overview ({viewMode.charAt(0).toUpperCase() + viewMode.slice(1)})</h2>
-        <EmotionCards data={emotionDataArray} emotionEmojis={emotionEmojis} emotionColors={emotionColors} />
+          <EmotionCards data={emotionDataArray}
+            emotionEmojis={emotionEmojis} 
+            emotionColors={emotionColors} />
       </div>
 
       {/* Line Chart for Emotion Trends */}
       <div className="bg-white p-6 shadow rounded-lg w-full">
         <h2 className="text-xl font-semibold mb-6 text-center">Emotional Intensity Over Time (Line Chart)</h2>
         <div className="h-96">
-          <EmotionLineChart data={emotionDataArray} />
+          <EmotionLineChart data={emotionDataArray.slice().reverse()} allEmotions={Object.keys(emotionEmojis)} />
         </div>
       </div>
     </div>
