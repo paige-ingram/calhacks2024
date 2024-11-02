@@ -1,6 +1,27 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+
+function formatInsights(rawText: string): string {
+  if (!rawText) return "<p>No insights available at this time.</p>";
+
+  // Clean and format the text for HTML
+  const formattedText = rawText
+    .replace(/\*\*([^\*]+)\*\*/g, "<b>$1</b>") // Bold text
+    .replace(/\* ([^\*]+):/g, "<li><b>$1:</b>") // List item with bold header
+    .replace(/\* ([^\*]+)\*/g, "<li>$1</li>")   // Simple list item
+    .replace(/\n{2,}/g, "</p><p>")              // Double newline as paragraph break
+    .replace(/\n/g, "<br />")                   // Single newline as line break
+    .replace(/<\/li>(?=<li>)/g, "");            // Remove duplicate </li> within lists
+  
+  // Wrap formatted content in paragraph and list structure
+  const wrappedContent = `
+    <p>${formattedText}</p>
+  `;
+  
+  return wrappedContent.trim();
+}
+
 const GeminiPage = () => {
   const [summary, setSummary] = useState<string>("");
   const [insights, setInsights] = useState<string>("");
@@ -16,7 +37,7 @@ const GeminiPage = () => {
         const data = await response.json();
 
         setSummary(data.summary);  // Set formatted summary in state
-        setInsights(data.insights); // Set formatted insights in state
+        setInsights(formatInsights(data.insights)); // Set formatted insights in state
       } catch (error) {
         console.error("Failed to fetch summary or insights:", error);
         setError("Unable to fetch summary or insights at the moment. Please try again later.");
