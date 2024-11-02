@@ -1,6 +1,27 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+
+function formatInsights(rawText: string): string {
+  if (!rawText) return "<p>No insights available at this time.</p>";
+
+  // Clean and format the text for HTML
+  const formattedText = rawText
+    .replace(/\*\*([^\*]+)\*\*/g, "<b>$1</b>") // Bold text
+    .replace(/\* ([^\*]+):/g, "<li><b>$1:</b>") // List item with bold header
+    .replace(/\* ([^\*]+)\*/g, "<li>$1</li>")   // Simple list item
+    .replace(/\n{2,}/g, "</p><p>")              // Double newline as paragraph break
+    .replace(/\n/g, "<br />")                   // Single newline as line break
+    .replace(/<\/li>(?=<li>)/g, "");            // Remove duplicate </li> within lists
+  
+  // Wrap formatted content in paragraph and list structure
+  const wrappedContent = `
+    <p>${formattedText}</p>
+  `;
+  
+  return wrappedContent.trim();
+}
+
 const GeminiPage = () => {
   const [summary, setSummary] = useState<string>("");
   const [insights, setInsights] = useState<string>("");
@@ -16,7 +37,7 @@ const GeminiPage = () => {
         const data = await response.json();
 
         setSummary(data.summary);  // Set formatted summary in state
-        setInsights(data.insights); // Set formatted insights in state
+        setInsights(formatInsights(data.insights)); // Set formatted insights in state
       } catch (error) {
         console.error("Failed to fetch summary or insights:", error);
         setError("Unable to fetch summary or insights at the moment. Please try again later.");
@@ -55,7 +76,7 @@ const GeminiPage = () => {
           className="text-4xl font-extrabold text-center mb-8"
           style={{ color: "#4A4A4A", fontFamily: "'Poppins', sans-serif" }}
         >
-          Gemini AI Insights
+          Gemini AI Insights 💫
         </h2>
 
         {loading ? (
@@ -66,38 +87,11 @@ const GeminiPage = () => {
           <>
             {/* Render summary and insights as HTML */}
             <div className="text-lg leading-relaxed mb-6 text-gray-800" style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}>
-              <h3>Summary:</h3>
-              <p>
-                The user started the conversation feeling good but quickly shared their stress about an upcoming project presentation at CowHacks. 
-                Technical issues with the project were causing them anxiety. They sought advice from the assistant, who recommended taking deep 
-                breaths, visualizing a smooth presentation, reviewing materials, and reminding themselves of their team's hard work. The user 
-                appreciated the suggestions and ended the conversation feeling more prepared and empowered to tackle the challenge.
-              </p>
+              <div dangerouslySetInnerHTML={{ __html: summary }} />
             </div>
 
             <div className="text-lg leading-relaxed mb-6 text-gray-800" style={{ lineHeight: "1.75", fontFamily: "'Roboto', sans-serif" }}>
-              <h3>AI-Driven Insights:</h3>
-              <ol>
-                <li>
-                  <b>Manage Stress Effectively:</b> The user expressed feeling stressed about their upcoming presentation. Taking deep breaths 
-                  and visualizing a successful presentation are great techniques to manage anxiety. Encourage the user to practice these 
-                  techniques regularly, not just before the presentation, to build a more resilient mindset.
-                  <br /><b>Action Step:</b> Spend 5 minutes each morning practicing deep breathing and visualization exercises to reduce 
-                  overall stress levels.
-                </li>
-                <li>
-                  <b>Prioritize Preparation:</b> The user mentioned feeling prepared, but also acknowledged potential issues. Reviewing 
-                  materials and anticipating problems will help them feel more confident and equipped to handle unexpected situations.
-                  <br /><b>Action Step:</b> Before the presentation, create a "troubleshooting checklist" for potential issues with their 
-                  project and list possible solutions.
-                </li>
-                <li>
-                  <b>Embrace Teamwork:</b> The user mentioned working on a project but did not explicitly mention involving teammates in 
-                  the problem-solving process. Encouraging teamwork can help to distribute the stress and find solutions collectively.
-                  <br /><b>Action Step:</b> Discuss potential issues and solutions with their team, encouraging everyone to share their 
-                  ideas and expertise.
-                </li>
-              </ol>
+              <div dangerouslySetInnerHTML={{ __html: insights }} />
             </div>
           </>
         )}
